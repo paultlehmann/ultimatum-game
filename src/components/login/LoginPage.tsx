@@ -14,17 +14,17 @@ interface IProps {
 const LoginPage = (props: IProps) => {
   const { setUser, user } = props;
 
-  const [userNameEntered, setUserNameEntered] = useState<boolean>(false);
+  const [loginClicked, setLoginClicked] = useState<boolean>(false);
   const [userNameFieldValue, setUserNameFieldValue] = useState<string>('');
 
-  const errorState = userNameEntered && !userNameFieldValue;
+  const errorState = loginClicked && !userNameFieldValue;
 
   const handleLoginClick = () => {
     setUser({ ...user, userName: userNameFieldValue });
-    setUserNameEntered(true);
+    setLoginClicked(true);
   };
 
-  //   useEffect(() => console.log('new state',{userNameEntered,userNameFieldValue}), [userNameEntered, userNameFieldValue])
+  //   useEffect(() => console.log('new state',{loginClicked,userNameFieldValue}), [loginClicked, userNameFieldValue])
 
   return (
     <>
