@@ -12,8 +12,6 @@ const App = () => {
 
   useEffect(() => console.log('new user', user), [user]);
 
-  console.log('!user.userName check', !user.userName);
-
   if (!user.userName) {
     return <LoginPage setUser={setUser} user={user} />;
   } else {
