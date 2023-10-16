@@ -122,6 +122,20 @@ app.get('/test2', (req, res) => {
   return res.send({ text: 'Received a GET HTTP method' });
 });
 
+app.post('/test3', (req, res) => {
+  const data = req.body;
+  console.log('data', data);
+
+  const { amount, game_id, offerer_id, round_number } = data;
+
+  pool.query(`insert into offers (game_id, round_number, offerer_id, amount)
+    values (${game_id}, ${round_number}, ${offerer_id}, ${amount})`);
+
+  return res.send('Data Received: ' + JSON.stringify(data));
+  // console.log('test3 req',req)
+  // return res.send('Received a POST HTTP method');
+});
+
 // app.listen(port, () => {
 //     console.log(`Server is running at http://localhost:${port}`);
 //   });

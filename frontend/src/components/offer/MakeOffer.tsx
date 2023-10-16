@@ -2,6 +2,7 @@ import { ChangeEvent, FocusEvent, useEffect, useState } from 'react';
 import { Button, TextField } from '@mui/material';
 
 const MakeOffer = (props: any) => {
+  const [offer, setOffer] = useState<number>(5);
   const [offerData, setOfferData] = useState<any>([]);
 
   useEffect(() => {
@@ -12,9 +13,9 @@ const MakeOffer = (props: any) => {
 
   const getOffers = () => {
     fetch('http://localhost:8008/test')
-      .then((response) => {
+      .then(async (response) => {
         console.log('response', response);
-        console.log('response.text()', response.text());
+        console.log('response.text()', await response.text());
         return response.text();
       })
       .then((data) => {
@@ -22,8 +23,27 @@ const MakeOffer = (props: any) => {
       });
   };
 
+  const saveOffer = () => {
+    fetch('http://localhost:8008/test3', {
+      method: 'POST',
+      // body: {
+      //   key: 'value'
+      // }
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        //  title: 'React POST Request Example'
+        accepted: false,
+        amount: offer,
+        game_id: 0,
+        offerer_id: 0,
+        round_number: 1
+      })
+    });
+  };
+
   const handleSubmitOfferClick = (ev: FocusEvent<HTMLInputElement>) => {
-    console.log(`offered ${ev.target.value}`);
+    console.log(`setting offer to ${ev.target.value}`);
+    setOffer(Number(ev.target.value));
   };
 
   return (
@@ -66,6 +86,7 @@ const MakeOffer = (props: any) => {
       <br />
       <Button
         // onClick={handleSubmitOfferClick}
+        onClick={saveOffer}
         style={{ marginTop: '5px' }}
         variant={'contained'}
       >
