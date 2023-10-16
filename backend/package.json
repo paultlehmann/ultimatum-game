@@ -4,9 +4,10 @@
   "version": "1.0.0",
   "main": "index.ts",
   "scripts": {
-    "build": "npx tsc",
+    "build": "npx tsc && rm ./dist",
     "start": "node dist/index.js",
-    "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/index.js\""
+    "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/index.js\"",
+    "test": "nodemon index.ts"
   },
   "dependencies": {
     "express": "^4.18.2",
@@ -21,5 +22,6 @@
     "nodemon": "^3.0.1",
     "prettier": "^3.0.3",
     "typescript": "^5.2.2"
-  }
+  },
+  "proxy": "http://localhost:8008"
 }

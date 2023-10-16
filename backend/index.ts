@@ -1,24 +1,24 @@
-import express, { Express, Request, Response } from 'express';
+import express, { Express, NextFunction, Request, Response } from 'express';
 import { Pool, QueryResult } from 'pg';
 import { IOffer } from './types';
 
 const app: Express = express();
-const port = 5432;
+const port = 8008;
 
-app.get('/', (req: Request, res: Response) => {
-  res.send('Express + TypeScript Server');
-});
+// app.get('/', (req: Request, res: Response) => {
+//   res.send('Express + TypeScript Server');
+// });
 
-app.listen(port, () => {
-  console.log(`Server is running at http://localhost:${port}`);
-});
+// app.listen(port, () => {
+//   console.log(`Server is running at http://localhost:${port}`);
+// });
 
 const pool = new Pool({
   user: 'postgres',
   host: 'localhost',
   database: 'postgres',
   password: 'postgres',
-  port
+  port: 5432
 });
 
 // const getTestData = async () => {
@@ -53,27 +53,75 @@ const getTestData = async () => {
   //     console.log('response',response)
   //     return response.rows
   // })
+  //   console.log('getTestData hit')
+  //   console.log('pool',pool)
   return pool
     .query('SELECT * FROM offers ORDER BY id ASC')
-    .then((response: QueryResult) => {
-      // console.log('response',response)
-      return response.rows;
+    .then((result: QueryResult) => {
+      console.log('result', result);
+      return result.rows;
     });
   // console.log('test',test)
   // return test.rows
   // .then((result: any) => console.log('result',result))
 };
 
-getTestData()
-  .then((offers: IOffer[]) => {
-    console.log('dataGotten:', offers);
-  })
-  .catch((error) => {
-    console.log('failure');
-  });
+// getTestData()
+//   .then((offers: IOffer[]) => {
+//     console.log('dataGotten:', offers);
+//   })
+//   .catch((error) => {
+//     console.log('failure');
+//   });
 
 // const passthrough = async () => await getTestData()
 // async () => await passthrough().then((rez: any) => console.log('rez',rez))
 
 // console.log('GTD return',(async () => await getTestData())());
 // console.log('GTD return',getTestData())
+
+app.use(express.json());
+app.use((req: Request, res: Response, next: NextFunction) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
+  res.setHeader(
+    'Access-Control-Allow-Headers',
+    'Content-Type, Access-Control-Allow-Headers'
+  );
+  next();
+});
+
+app.listen(port, () => {
+  console.log(`Server is running at http://localhost:${port}`);
+});
+
+app.get('/test', (req: Request, res: Response) => {
+  //   merchant_model.getMerchants()
+  //   .then(response => {
+  //     res.status(200).send(response);
+  //   })
+  //   .catch(error => {
+  //     res.status(500).send(error);
+  //   })
+
+  console.log('resolver hit');
+
+  getTestData()
+    .then((offers: IOffer[]) => {
+      console.log('dataGotten:', offers);
+      return res.status(200).send(offers);
+    })
+    .catch((error) => {
+      console.log('failure');
+      return res.status(500).send(error);
+    });
+});
+
+app.get('/test2', (req, res) => {
+  console.log('test2 hit');
+  return res.send({ text: 'Received a GET HTTP method' });
+});
+
+// app.listen(port, () => {
+//     console.log(`Server is running at http://localhost:${port}`);
+//   });

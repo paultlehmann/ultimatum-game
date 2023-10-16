@@ -1,7 +1,27 @@
-import { ChangeEvent, FocusEvent } from 'react';
+import { ChangeEvent, FocusEvent, useEffect, useState } from 'react';
 import { Button, TextField } from '@mui/material';
 
 const MakeOffer = (props: any) => {
+  const [offerData, setOfferData] = useState<any>([]);
+
+  useEffect(() => {
+    getOffers();
+  }, []);
+
+  useEffect(() => console.log('new offerData', offerData), [offerData]);
+
+  const getOffers = () => {
+    fetch('http://localhost:8008/test')
+      .then((response) => {
+        console.log('response', response);
+        console.log('response.text()', response.text());
+        return response.text();
+      })
+      .then((data) => {
+        setOfferData(data);
+      });
+  };
+
   const handleSubmitOfferClick = (ev: FocusEvent<HTMLInputElement>) => {
     console.log(`offered ${ev.target.value}`);
   };
