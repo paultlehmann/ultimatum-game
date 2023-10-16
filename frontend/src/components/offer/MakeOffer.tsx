@@ -12,7 +12,7 @@ const MakeOffer = (props: any) => {
   useEffect(() => console.log('new offerData', offerData), [offerData]);
 
   const getOffers = () => {
-    fetch('http://localhost:8008/test')
+    fetch('http://localhost:8008/get-offers')
       .then(async (response) => {
         console.log('response', response);
         console.log('response.text()', await response.text());
@@ -24,14 +24,10 @@ const MakeOffer = (props: any) => {
   };
 
   const saveOffer = () => {
-    fetch('http://localhost:8008/test3', {
+    fetch('http://localhost:8008/save-offer', {
       method: 'POST',
-      // body: {
-      //   key: 'value'
-      // }
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        //  title: 'React POST Request Example'
         accepted: false,
         amount: offer,
         game_id: 0,
@@ -50,18 +46,6 @@ const MakeOffer = (props: any) => {
     <>
       <div>Offer:</div>
       <TextField
-        // error={errorState}
-        // helperText={
-        //   errorState && (
-        //     <div style={{ textAlign: 'center' }}>
-        //       Error - no username entered!
-        //     </div>
-        //   )
-        // }
-        // onChange={(ev: ChangeEvent<HTMLInputElement>) =>
-        //   setUserNameFieldValue(ev.target.value)
-        // }
-        // value={userNameFieldValue}
         defaultValue={5}
         InputProps={{
           inputProps: {
@@ -85,7 +69,6 @@ const MakeOffer = (props: any) => {
       />
       <br />
       <Button
-        // onClick={handleSubmitOfferClick}
         onClick={saveOffer}
         style={{ marginTop: '5px' }}
         variant={'contained'}
