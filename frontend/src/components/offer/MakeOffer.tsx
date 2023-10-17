@@ -45,7 +45,7 @@ const MakeOffer = (props: any) => {
       <br />
       <Button
         onClick={() => saveOffer(offer)}
-        style={{ marginTop: '5px' }}
+        // style={{ marginTop: '5px' }}
         variant={'contained'}
       >
         Submit Offer
