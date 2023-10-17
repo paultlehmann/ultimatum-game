@@ -1,5 +1,6 @@
 import express, { Express, NextFunction, Request, Response } from 'express';
 import { Pool, QueryResult } from 'pg';
+import _ from 'lodash';
 import { IOffer } from './types';
 
 const app: Express = express();
@@ -17,7 +18,7 @@ const getTestData = async () => {
   return pool
     .query('SELECT * FROM offers ORDER BY id ASC')
     .then((result: QueryResult) => {
-      console.log('result', result);
+      //   console.log('result', result);
       return result.rows;
     });
 };
@@ -38,11 +39,11 @@ app.get('/get-offers', (req: Request, res: Response) => {
 
   getTestData()
     .then((offers: IOffer[]) => {
-      console.log('dataGotten:', offers);
+      //   console.log('dataGotten:', offers);
       return res.status(200).send(offers);
     })
     .catch((error) => {
-      console.log('failure');
+      console.error('failure');
       return res.status(500).send(error);
     });
 });
@@ -54,7 +55,7 @@ app.get('/get-offers', (req: Request, res: Response) => {
 
 app.post('/save-offer', (req: Request, res: Response) => {
   const data = req.body;
-  console.log('data', data);
+  //   console.log('data', data);
 
   const { amount, game_id, offerer_id, round_number } = data;
 
@@ -62,6 +63,32 @@ app.post('/save-offer', (req: Request, res: Response) => {
     values (${game_id}, ${round_number}, ${offerer_id}, ${amount})`);
 
   return res.send('Data Received: ' + JSON.stringify(data));
+});
+
+app.post('/create-user', (req: Request, res: Response) => {
+  const data = req.body;
+  // console.log('data', data);
+
+  const { admin, username } = data;
+
+  pool
+    .query(`SELECT * FROM users where username = '${username}'`)
+    .then((result: QueryResult) => {
+      // console.log('user result',result)
+      if (_.isEmpty(result.rows)) {
+        pool.query(`insert into users (username, admin)
+    values ('${username}',${admin})`);
+        console.log(`new user ${username} created`);
+      } else {
+        console.log(`user ${username} already exists`);
+      }
+      // if(result.rows)
+    });
+
+  // pool.query(`insert into users (username, admin)
+  // values (${username},${admin})`);
+
+  // return res.send('Data Received: ' + JSON.stringify(data));
 });
 
 app.listen(port, () => {

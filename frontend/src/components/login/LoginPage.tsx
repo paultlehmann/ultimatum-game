@@ -4,6 +4,7 @@ import {
   useState
 } from 'react';
 import { Button, TextField } from '@mui/material';
+import { createUser } from '../../queries/login';
 import { IUser } from '../../types';
 
 interface IProps {
@@ -22,6 +23,7 @@ const LoginPage = (props: IProps) => {
   const handleLoginClick = () => {
     setUser({ ...user, userName: userNameFieldValue });
     setLoginClicked(true);
+    createUser(userNameFieldValue, false);
   };
 
   //   useEffect(() => console.log('new state',{loginClicked,userNameFieldValue}), [loginClicked, userNameFieldValue])

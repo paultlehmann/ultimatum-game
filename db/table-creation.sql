@@ -7,3 +7,11 @@ CREATE TABLE offers (
   amount integer not null,
   accepted boolean null
 );
+
+CREATE TABLE users (
+  id SERIAL PRIMARY KEY,
+  username varchar(100) not null,
+  password varchar(100) null,
+  email varchar(100) null,
+  admin boolean not null
+);

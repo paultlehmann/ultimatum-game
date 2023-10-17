@@ -10,7 +10,9 @@
     "test": "nodemon index.ts"
   },
   "dependencies": {
+    "@types/lodash": "^4.14.199",
     "express": "^4.18.2",
+    "lodash": "^4.17.21",
     "pg": "^8.11.3",
     "ts-node": "^10.9.1"
   },
