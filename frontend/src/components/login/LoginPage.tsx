@@ -11,11 +11,14 @@ import { IUser } from '../../types';
 
 interface IProps {
   setUser: Dispatch<SetStateAction<IUser>>;
-  user: IUser;
+  // user: IUser;
 }
 
 const LoginPage = (props: IProps) => {
-  const { setUser, user } = props;
+  const {
+    setUser
+    // user
+  } = props;
 
   const [loginClicked, setLoginClicked] = useState<boolean>(false);
   const [userNameFieldValue, setUserNameFieldValue] = useState<string>('');
@@ -23,7 +26,7 @@ const LoginPage = (props: IProps) => {
   const errorState = loginClicked && !userNameFieldValue;
 
   const handleLoginClick = () => {
-    setUser({ ...user, userName: userNameFieldValue });
+    // setUser({ ...user, userName: userNameFieldValue });
     setLoginClicked(true);
     createUser(userNameFieldValue, false, setUser);
   };

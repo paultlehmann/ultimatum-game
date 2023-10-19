@@ -4,7 +4,6 @@ import { IUser } from '../types';
 export const createUser = (
   username: string,
   admin: boolean,
-  // setUser: (newVal: IUser) => void)
   setUser: Dispatch<SetStateAction<IUser>>
 ) => {
   console.log('createUser hit');
@@ -17,16 +16,16 @@ export const createUser = (
     })
   })
     .then(async (response: Response) => {
-      console.log('response', response);
+      // console.log('response', response);
       // console.log('response.text()', await response.text());
       return await response.text();
     })
     .then((existsAndIsAdmin: string) => {
       // console.log('dataf',data,typeof data);
       if (existsAndIsAdmin === 'true') {
-        setUser((prevVal: IUser) => {
-          return { ...prevVal, admin: true };
-        });
+        setUser({ userName: username, admin: true });
+      } else {
+        setUser({ userName: username, admin: false });
       }
     });
 };

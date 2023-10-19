@@ -16,7 +16,12 @@ const App = () => {
   useEffect(() => console.log('new user', user), [user]);
 
   if (!user.userName) {
-    return <LoginPage setUser={setUser} user={user} />;
+    return (
+      <LoginPage
+        setUser={setUser}
+        // user={user}
+      />
+    );
   } else {
     return (
       <AppContainer userName={user.userName} setUser={setUser}>
