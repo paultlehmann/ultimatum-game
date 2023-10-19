@@ -54,33 +54,30 @@ app.get('/get-offers', (req: Request, res: Response) => {
 // });
 
 app.post('/save-offer', (req: Request, res: Response) => {
-  const data = req.body;
-  //   console.log('data', data);
-
-  const { amount, game_id, offerer_id, round_number } = data;
+  const { amount, game_id, offerer_id, round_number } = req.body;
 
   pool.query(`insert into offers (game_id, round_number, offerer_id, amount)
     values (${game_id}, ${round_number}, ${offerer_id}, ${amount})`);
 
-  return res.send('Data Received: ' + JSON.stringify(data));
+  return res.send('Data Received: ' + JSON.stringify(req.body));
 });
 
 app.post('/create-user', (req: Request, res: Response) => {
-  const data = req.body;
-  // console.log('data', data);
-
-  const { admin, username } = data;
+  const { admin, username } = req.body;
 
   pool
     .query(`SELECT * FROM users where username = '${username}'`)
     .then((result: QueryResult) => {
-      // console.log('user result',result)
+      console.log('user result', result);
       if (_.isEmpty(result.rows)) {
         pool.query(`insert into users (username, admin)
     values ('${username}',${admin})`);
         console.log(`new user ${username} created`);
+        return res.send(false);
       } else {
         console.log(`user ${username} already exists`);
+        console.log('and is an admin? ', result.rows[0].admin);
+        return res.send(result.rows[0].admin);
       }
       // if(result.rows)
     });

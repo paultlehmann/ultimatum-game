@@ -4,6 +4,7 @@ import LoginPage from './components/login/LoginPage';
 // import TopHeader from './components/TopHeader'
 import AppContainer from './components/AppContainer';
 import MakeOffer from './components/offer/MakeOffer';
+import ManageGame from './components/admin/ManageGame';
 import { IUser } from './types';
 
 const App = () => {
@@ -19,7 +20,7 @@ const App = () => {
   } else {
     return (
       <AppContainer userName={user.userName} setUser={setUser}>
-        <MakeOffer />
+        {user.admin ? <ManageGame /> : <MakeOffer />}
       </AppContainer>
     );
   }

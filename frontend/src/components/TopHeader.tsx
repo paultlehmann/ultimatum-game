@@ -1,8 +1,9 @@
+import { Dispatch, SetStateAction } from 'react';
 import { Link } from '@mui/material';
 import { IUser } from '../types';
 
 interface IProps {
-  setUser: (newVal: IUser) => void;
+  setUser: Dispatch<SetStateAction<IUser>>;
   userName: string;
 }
 

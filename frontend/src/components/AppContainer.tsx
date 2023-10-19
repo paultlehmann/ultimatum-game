@@ -1,6 +1,14 @@
+import { Dispatch, ReactNode, SetStateAction } from 'react';
 import TopHeader from './TopHeader';
+import { IUser } from '../types';
 
-const AppContainer = (props: any) => {
+interface IProps {
+  children: ReactNode;
+  setUser: Dispatch<SetStateAction<IUser>>;
+  userName: string;
+}
+
+const AppContainer = (props: IProps) => {
   const { children, setUser, userName } = props;
 
   return (

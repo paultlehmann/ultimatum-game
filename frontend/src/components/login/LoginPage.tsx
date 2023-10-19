@@ -1,5 +1,7 @@
 import {
   ChangeEvent,
+  Dispatch,
+  SetStateAction,
   // useEffect,
   useState
 } from 'react';
@@ -8,7 +10,7 @@ import { createUser } from '../../queries/login';
 import { IUser } from '../../types';
 
 interface IProps {
-  setUser: (newVal: IUser) => void;
+  setUser: Dispatch<SetStateAction<IUser>>;
   user: IUser;
 }
 
@@ -23,7 +25,7 @@ const LoginPage = (props: IProps) => {
   const handleLoginClick = () => {
     setUser({ ...user, userName: userNameFieldValue });
     setLoginClicked(true);
-    createUser(userNameFieldValue, false);
+    createUser(userNameFieldValue, false, setUser);
   };
 
   //   useEffect(() => console.log('new state',{loginClicked,userNameFieldValue}), [loginClicked, userNameFieldValue])

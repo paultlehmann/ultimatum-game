@@ -1,16 +1,24 @@
-import { ChangeEvent, FocusEvent, useEffect, useState } from 'react';
+import {
+  ChangeEvent,
+  FocusEvent,
+  // useEffect,
+  useState
+} from 'react';
 import { Button, TextField } from '@mui/material';
-import { getOffers, saveOffer } from '../../queries/make-offer';
+import {
+  // getOffers,
+  saveOffer
+} from '../../queries/make-offer';
 
 const MakeOffer = (props: any) => {
   const [offer, setOffer] = useState<number>(5);
-  const [offerData, setOfferData] = useState<any>([]);
+  // const [offerData, setOfferData] = useState<any>([]);
 
-  useEffect(() => {
-    getOffers(setOfferData);
-  }, []);
+  // useEffect(() => {
+  //   getOffers(setOfferData);
+  // }, []);
 
-  useEffect(() => console.log('new offerData', offerData), [offerData]);
+  // useEffect(() => console.log('new offerData', offerData), [offerData]);
 
   const handleSubmitOfferClick = (ev: FocusEvent<HTMLInputElement>) => {
     console.log(`setting offer to ${ev.target.value}`);
