@@ -6,7 +6,7 @@ export const createUser = (
   admin: boolean,
   setUser: Dispatch<SetStateAction<IUser>>
 ) => {
-  console.log('createUser hit');
+  // console.log('createUser hit');
   fetch('http://localhost:8008/create-user', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -25,7 +25,7 @@ export const createUser = (
       if (existsAndIsAdmin === 'true') {
         setUser({ userName: username, admin: true });
       } else {
-        setUser({ userName: username, admin: false });
+        setUser({ userName: username, admin: admin || false });
       }
     });
 };

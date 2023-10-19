@@ -6,8 +6,8 @@ import {
   useState
 } from 'react';
 import { Button, TextField } from '@mui/material';
-import { createUser } from '../../queries/login';
-import { IUser } from '../../types';
+import { createUser } from '../queries/login';
+import { IUser } from '../types';
 
 interface IProps {
   setUser: Dispatch<SetStateAction<IUser>>;

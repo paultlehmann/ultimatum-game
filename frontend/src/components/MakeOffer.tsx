@@ -8,7 +8,7 @@ import { Button, TextField } from '@mui/material';
 import {
   // getOffers,
   saveOffer
-} from '../../queries/make-offer';
+} from '../queries/make-offer';
 
 const MakeOffer = (props: any) => {
   const [offer, setOffer] = useState<number>(5);
