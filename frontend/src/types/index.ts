@@ -1,5 +1,6 @@
 export interface IUser {
   admin: boolean;
+  id?: number;
   userName: string;
 }
 

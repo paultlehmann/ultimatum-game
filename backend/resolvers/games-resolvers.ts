@@ -8,13 +8,13 @@ import { pool } from '..';
 type TGameStage = 'pre' | 'offer' | 'accept' | 'post';
 
 interface IGameQueryOptions {
-  admin?: number;
+  admin?: string;
   participant?: number;
   stage?: TGameStage;
 }
 
-interface IAdjustedValues {
-  admin?: number;
+interface IAdjustedValues extends Record<number, string> {
+  admin?: string;
   // participants?: string;
   stage?: `'${TGameStage}'`;
 }
@@ -25,12 +25,29 @@ export const checkForGamesResolver = () => (req: Request, res: Response) => {
 
   console.log('checkForGamesResolver args', req.body);
 
-  const adjustedValues: IAdjustedValues = {
-    admin,
-    // participants: `'{${participants?.join(',')}}'`,
-    [participant || -1]: 'ANY(participants)',
-    stage: stage && `'${stage}'`
-  };
+  const adjustedValues: IAdjustedValues = {};
+
+  if (admin) {
+    adjustedValues.admin = `(select id from users where username = '${admin}')`;
+  }
+
+  if (participant) {
+    adjustedValues[participant] = 'ANY(participants)';
+  }
+
+  if (stage) {
+    adjustedValues.stage = `'${stage}'`;
+  }
+
+  // const adjustedValues: IAdjustedValues = !_.isUndefined(participant) ? {
+  //   admin,
+  //   // participants: `'{${participants?.join(',')}}'`,
+  //   [participant]: 'ANY(participants)',
+  //   stage: stage && `'${stage}'`
+  // } : {
+  //   admin,
+  //   stage: stage && `'${stage}'`
+  // };
 
   const wheres = Object.keys(adjustedValues)
     .map(
@@ -40,7 +57,7 @@ export const checkForGamesResolver = () => (req: Request, res: Response) => {
     )
     ?.join('');
 
-  console.log('wheres', wheres);
+  // console.log('wheres', wheres);
   console.log('query', `SELECT * FROM games ${wheres}`);
 
   // const checkForGames = async () => {

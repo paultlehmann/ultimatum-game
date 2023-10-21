@@ -18,11 +18,16 @@ export const createUserResolver = () => (req: Request, res: Response) => {
         pool.query(`insert into users (username, admin)
       values ('${username}',${admin})`);
         console.log(`new user ${username} created`);
-        return res.status(200).send(false);
+        return res.status(200).send({ isAdmin: false });
       } else {
         console.log(`user ${username} already exists`);
         console.log('and is an admin? ', result.rows[0].admin);
-        return res.status(200).send(result.rows[0].admin);
+        return res
+          .status(200)
+          .send({
+            id: result.rows[0].id,
+            isAdmin: result.rows[0].admin === 'true'
+          });
       }
       // if(result.rows)
     });

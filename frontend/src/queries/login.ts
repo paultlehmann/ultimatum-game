@@ -1,6 +1,11 @@
 import { Dispatch, SetStateAction } from 'react';
 import { IUser } from '../types';
 
+// interface ICreateUserReturn {
+//   id: number;
+//   isAdmin: boolean;
+// }
+
 export const createUser = (
   username: string,
   admin: boolean,
@@ -18,14 +23,20 @@ export const createUser = (
     .then(async (response: Response) => {
       // console.log('response', response);
       // console.log('response.text()', await response.text());
-      return await response.text();
+      return await response.json();
     })
-    .then((existsAndIsAdmin: string) => {
-      // console.log('dataf',data,typeof data);
-      if (existsAndIsAdmin === 'true') {
-        setUser({ userName: username, admin: true });
+    .then((createUserReturn: any) => {
+      console.log(
+        'createUserReturn',
+        createUserReturn,
+        typeof createUserReturn
+      );
+      const { id, isAdmin } = createUserReturn;
+
+      if (isAdmin) {
+        setUser({ userName: username, admin: true, id });
       } else {
-        setUser({ userName: username, admin: admin || false });
+        setUser({ userName: username, admin: admin || false, id });
       }
     });
 };
