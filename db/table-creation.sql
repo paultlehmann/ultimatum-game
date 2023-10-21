@@ -15,3 +15,11 @@ CREATE TABLE users (
   email varchar(100) null,
   admin boolean not null
 );
+
+CREATE TYPE stage_option AS ENUM ('pre', 'offer', 'accept', 'post');
+CREATE TABLE games (
+  id SERIAL PRIMARY KEY,
+  admin integer not null,
+  participants integer[] not null default array[]::integer[],
+  stage stage_option not null default 'pre'
+);

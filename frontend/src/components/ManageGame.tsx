@@ -1,7 +1,15 @@
 import { checkForGames } from '../queries/games';
+import { TGameStage } from '../types';
 
-const ManageGame = (props: any) => {
-  const gameResults = checkForGames({ admin: 6 });
+interface IProps {
+  userId: number;
+}
+
+const ManageGame = (props: IProps) => {
+  const { userId } = props;
+  const stages: TGameStage[] = ['pre', 'offer', 'accept'];
+
+  const gameResults = checkForGames({ admin: userId, stages });
   console.log('gameResults', gameResults);
   return null;
 };

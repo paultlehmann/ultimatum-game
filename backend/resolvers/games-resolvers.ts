@@ -3,25 +3,24 @@ import { QueryResult } from 'pg';
 import _ from 'lodash';
 import { pool } from '..';
 
-// const { app, pool } = serverInfo
-
 type TGameStage = 'pre' | 'offer' | 'accept' | 'post';
 
 interface IGameQueryOptions {
   admin?: number;
   participant?: number;
-  stage?: TGameStage;
+  stages?: TGameStage[];
 }
 
 interface IAdjustedValues extends Record<number, string> {
   admin?: number;
   // participants?: string;
-  stage?: `'${TGameStage}'`;
+  // stage?: `'${TGameStage}'`;
+  stage?: string;
 }
 
 export const checkForGamesResolver = () => (req: Request, res: Response) => {
   // console.log('resolver hit');
-  const { admin, participant, stage }: IGameQueryOptions = req.body;
+  const { admin, participant, stages }: IGameQueryOptions = req.body;
 
   console.log('checkForGamesResolver args', req.body);
 
@@ -36,8 +35,10 @@ export const checkForGamesResolver = () => (req: Request, res: Response) => {
     adjustedValues[participant] = 'ANY(participants)';
   }
 
-  if (stage) {
-    adjustedValues.stage = `'${stage}'`;
+  if (stages) {
+    adjustedValues.stage = `(${stages
+      .map((stage: TGameStage) => `'${stage}'`)
+      .join(',')})`;
   }
 
   // const adjustedValues: IAdjustedValues = !_.isUndefined(participant) ? {
@@ -54,7 +55,9 @@ export const checkForGamesResolver = () => (req: Request, res: Response) => {
     .map(
       (key: string, index: number) =>
         // @ts-ignore
-        `${index === 0 ? 'where' : ' and'} ${key} = ${adjustedValues[key]}`
+        `${index === 0 ? 'where' : ' and'} ${key} ${
+          key === 'stage' ? 'IN' : '='
+        } ${adjustedValues[key]}`
     )
     ?.join('');
 

@@ -4,7 +4,7 @@ import { TGameStage } from '../types';
 interface IGameQueryOptions {
   admin?: number;
   participant?: number;
-  stage?: TGameStage;
+  stages?: TGameStage[];
 }
 
 export const checkForGames =
@@ -24,11 +24,11 @@ export const checkForGames =
     })
       .then(async (response: Response) => {
         // console.log('response', response);
-        // console.log('response.text()', await response.text());
-        return response.text();
+        return response.json();
       })
       .then((result: any) => {
         console.log('checkForGames result', result);
+        return result;
       });
   };
 
@@ -40,13 +40,12 @@ export const createGame = (admin: number, participants: number[]) => {
       admin,
       participants
     })
-  })
-    .then(async (response: Response) => {
-      // console.log('response', response);
-      // console.log('response.text()', await response.text());
-      return await response.text();
-    })
-    .then((result: any) => {
-      console.log('createGame result', result);
-    });
+  }).then(async (response: Response) => {
+    // console.log('response', response);
+    // console.log('response.text()', await response.text());
+    return await response.text();
+  });
+  // .then((result: any) => {
+  //   console.log('createGame result', result);
+  // });
 };

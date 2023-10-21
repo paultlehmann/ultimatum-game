@@ -26,11 +26,11 @@ export const createUser = (
       return await response.json();
     })
     .then((createUserReturn: any) => {
-      console.log(
-        'createUserReturn',
-        createUserReturn,
-        typeof createUserReturn
-      );
+      // console.log(
+      //   'createUserReturn',
+      //   createUserReturn,
+      //   typeof createUserReturn
+      // );
       const { id, isAdmin } = createUserReturn;
 
       if (isAdmin) {

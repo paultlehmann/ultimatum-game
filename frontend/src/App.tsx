@@ -35,7 +35,7 @@ const App = () => {
     return (
       <AppContainer userName={user.userName} setUser={setUser}>
         {user.admin ? (
-          <ManageGame />
+          <ManageGame userId={user.id || -1} />
         ) : gameState.stage === 'pre' ? (
           <GameLobby />
         ) : (
