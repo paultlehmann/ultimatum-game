@@ -13,14 +13,15 @@ import {
 } from './resolvers/offers-resolvers';
 
 const app: Express = express();
-const port = 8008;
+const backendPort = 8008;
+const dbPort = 5432;
 
 export const pool = new Pool({
   user: 'postgres',
   host: 'localhost',
   database: 'postgres',
   password: 'postgres',
-  port: 5432
+  port: dbPort
 });
 
 app.use(express.json());
@@ -34,7 +35,7 @@ app.use((req: Request, res: Response, next: NextFunction) => {
   next();
 });
 
-app.get('/check-for-games', checkForGamesResolver());
+app.post('/check-for-games', checkForGamesResolver());
 
 app.get('/get-offers', getOffersResolver());
 
@@ -119,6 +120,6 @@ app.post('/save-offer', saveOfferResolver());
 //   // return res.send('Data Received: ' + JSON.stringify(data));
 // });
 
-app.listen(port, () => {
-  console.log(`Server is running at http://localhost:${port}`);
+app.listen(backendPort, () => {
+  console.log(`Server is running at http://localhost:${backendPort}`);
 });

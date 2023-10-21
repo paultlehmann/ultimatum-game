@@ -13,7 +13,7 @@ export const createUserResolver = () => (req: Request, res: Response) => {
   pool
     .query(`SELECT * FROM users where username = '${username}'`)
     .then((result: QueryResult) => {
-      console.log('user result', result);
+      // console.log('user result', result);
       if (_.isEmpty(result.rows)) {
         pool.query(`insert into users (username, admin)
       values ('${username}',${admin})`);

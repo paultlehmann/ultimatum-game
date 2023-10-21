@@ -8,5 +8,7 @@ export interface IGameState {
   adminName: string;
   gameId?: number;
   round: number;
-  stage: 'pre' | 'offer' | 'accept' | 'post';
+  stage: TGameStage;
 }
+
+export type TGameStage = 'pre' | 'offer' | 'accept' | 'post';
