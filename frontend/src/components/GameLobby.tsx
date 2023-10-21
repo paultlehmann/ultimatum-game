@@ -1,13 +1,11 @@
-import { Button } from '@mui/material';
-import { Sync } from '@mui/icons-material';
+import ButtonWithRefresh from './ButtonWithRefresh';
+import { checkForGames } from '../queries/games';
 
 const GameLobby = (props: any) => {
   return (
     <>
       <h1>No games found!</h1>
-      <Button size={'large'} variant={'contained'} endIcon={<Sync />}>
-        Check Again
-      </Button>
+      <ButtonWithRefresh onClick={checkForGames} text={'Check Again'} />
     </>
   );
 };
