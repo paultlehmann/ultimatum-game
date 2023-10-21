@@ -2,7 +2,7 @@ import ButtonWithRefresh from './ButtonWithRefresh';
 import { checkForGames } from '../queries/games';
 
 const GameLobby = (props: any) => {
-  const admin = 'an';
+  const admin = 6;
   const participant = 1;
   const stage = 'pre';
   return (

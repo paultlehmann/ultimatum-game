@@ -8,13 +8,13 @@ import { pool } from '..';
 type TGameStage = 'pre' | 'offer' | 'accept' | 'post';
 
 interface IGameQueryOptions {
-  admin?: string;
+  admin?: number;
   participant?: number;
   stage?: TGameStage;
 }
 
 interface IAdjustedValues extends Record<number, string> {
-  admin?: string;
+  admin?: number;
   // participants?: string;
   stage?: `'${TGameStage}'`;
 }
@@ -28,7 +28,8 @@ export const checkForGamesResolver = () => (req: Request, res: Response) => {
   const adjustedValues: IAdjustedValues = {};
 
   if (admin) {
-    adjustedValues.admin = `(select id from users where username = '${admin}')`;
+    // adjustedValues.admin = `(select id from users where username = '${admin}')`;
+    adjustedValues.admin = admin;
   }
 
   if (participant) {
