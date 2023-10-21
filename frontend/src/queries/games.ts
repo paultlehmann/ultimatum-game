@@ -3,7 +3,7 @@ import { TGameStage } from '../types';
 
 interface IGameQueryOptions {
   admin?: number;
-  participants?: number[];
+  participant?: number;
   stage?: TGameStage;
 }
 

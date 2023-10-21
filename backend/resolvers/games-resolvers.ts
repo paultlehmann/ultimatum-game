@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { QueryResult } from 'pg';
+import _ from 'lodash';
 import { pool } from '..';
 
 // const { app, pool } = serverInfo
@@ -8,27 +9,30 @@ type TGameStage = 'pre' | 'offer' | 'accept' | 'post';
 
 interface IGameQueryOptions {
   admin?: number;
-  participants?: number[];
+  participant?: number;
   stage?: TGameStage;
 }
 
 interface IAdjustedValues {
   admin?: number;
-  participants?: string;
+  // participants?: string;
   stage?: `'${TGameStage}'`;
 }
 
 export const checkForGamesResolver = () => (req: Request, res: Response) => {
   // console.log('resolver hit');
-  const { admin, participants, stage }: IGameQueryOptions = req.body;
+  const { admin, participant, stage }: IGameQueryOptions = req.body;
+
+  console.log('checkForGamesResolver args', req.body);
 
   const adjustedValues: IAdjustedValues = {
     admin,
-    participants: `'{${participants?.join(',')}}'`,
+    // participants: `'{${participants?.join(',')}}'`,
+    [participant || -1]: 'ANY(participants)',
     stage: stage && `'${stage}'`
   };
 
-  const wheres = Object.keys(req.body)
+  const wheres = Object.keys(adjustedValues)
     .map(
       (key: string, index: number) =>
         // @ts-ignore
