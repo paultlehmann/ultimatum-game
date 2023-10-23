@@ -54,9 +54,9 @@ export const checkForGamesResolver = () => (req: Request, res: Response) => {
   const wheres = Object.keys(adjustedValues)
     .map(
       (key: string, index: number) =>
-        // @ts-ignore
         `${index === 0 ? 'where' : ' and'} ${key} ${
           key === 'stage' ? 'IN' : '='
+          // @ts-ignore
         } ${adjustedValues[key]}`
     )
     ?.join('');

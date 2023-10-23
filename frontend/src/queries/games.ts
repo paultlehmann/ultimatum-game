@@ -1,5 +1,5 @@
-// import { MouseEvent } from 'react'
-import { TGameStage } from '../types';
+import _ from 'lodash';
+import { IGameState, SetState, TGameStage } from '../types';
 
 interface IGameQueryOptions {
   admin?: number;
@@ -9,7 +9,7 @@ interface IGameQueryOptions {
 
 export const checkForGames =
   // (ev: MouseEvent<HTMLButtonElement>) =>
-  (options: IGameQueryOptions) => {
+  (setResult: SetState<IGameState | null>, options: IGameQueryOptions) => {
     console.log('checkForGames hit');
     fetch('http://localhost:8008/check-for-games', {
       method: 'POST',
@@ -22,13 +22,17 @@ export const checkForGames =
       // })
       body: JSON.stringify(options)
     })
-      .then(async (response: Response) => {
+      .then((response: Response) => {
         // console.log('response', response);
+        console.log('hit1');
         return response.json();
       })
-      .then((result: any) => {
-        console.log('checkForGames result', result);
-        return result;
+      .then((result: IGameState[]) => {
+        if (!_.isEmpty(result)) {
+          console.log('hit2');
+          setResult(result[0]);
+        }
+        // return result;
       });
   };
 

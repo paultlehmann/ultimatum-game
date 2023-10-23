@@ -1,16 +1,14 @@
 import {
   ChangeEvent,
-  Dispatch,
-  SetStateAction,
   // useEffect,
   useState
 } from 'react';
 import { Button, TextField } from '@mui/material';
 import { createUser } from '../queries/login';
-import { IUser } from '../types';
+import { IUser, SetState } from '../types';
 
 interface IProps {
-  setUser: Dispatch<SetStateAction<IUser>>;
+  setUser: SetState<IUser>;
   // user: IUser;
 }
 

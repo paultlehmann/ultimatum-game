@@ -1,5 +1,4 @@
-import { Dispatch, SetStateAction } from 'react';
-import { IUser } from '../types';
+import { IUser, SetState } from '../types';
 
 // interface ICreateUserReturn {
 //   id: number;
@@ -9,7 +8,7 @@ import { IUser } from '../types';
 export const createUser = (
   username: string,
   admin: boolean,
-  setUser: Dispatch<SetStateAction<IUser>>
+  setUser: SetState<IUser>
 ) => {
   // console.log('createUser hit');
   fetch('http://localhost:8008/create-user', {

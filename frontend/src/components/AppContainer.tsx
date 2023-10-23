@@ -1,10 +1,10 @@
-import { Dispatch, ReactNode, SetStateAction } from 'react';
+import { ReactNode } from 'react';
 import TopHeader from './TopHeader';
-import { IUser } from '../types';
+import { IUser, SetState } from '../types';
 
 interface IProps {
   children: ReactNode;
-  setUser: Dispatch<SetStateAction<IUser>>;
+  setUser: SetState<IUser>;
   userName: string;
 }
 

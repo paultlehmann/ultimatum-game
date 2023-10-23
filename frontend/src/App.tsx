@@ -16,13 +16,15 @@ const App = () => {
 
   const [gameState, setGameState] = useState<IGameState>({
     // participants: [],
-    adminName: '',
-    gameId: undefined,
+    admin: -1,
+    id: undefined,
     round: 1,
     stage: 'pre'
   });
 
   useEffect(() => console.log('new user', user), [user]);
+
+  useEffect(() => console.log('new gameState', gameState), [gameState]);
 
   if (!user.userName) {
     return (
@@ -35,7 +37,7 @@ const App = () => {
     return (
       <AppContainer userName={user.userName} setUser={setUser}>
         {user.admin ? (
-          <ManageGame userId={user.id || -1} />
+          <ManageGame setGameState={setGameState} userId={user.id || -1} />
         ) : gameState.stage === 'pre' ? (
           <GameLobby />
         ) : (
