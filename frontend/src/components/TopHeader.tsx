@@ -1,13 +1,14 @@
 import { Link } from '@mui/material';
-import { IUser, SetState } from '../types';
+import { IGameState, IUser, SetState } from '../types';
 
 interface IProps {
+  setGameState: SetState<IGameState>;
   setUser: SetState<IUser>;
   userName: string;
 }
 
 const TopHeader = (props: IProps) => {
-  const { setUser, userName } = props;
+  const { setGameState, setUser, userName } = props;
 
   return (
     <>
@@ -23,12 +24,18 @@ const TopHeader = (props: IProps) => {
         {`Logged in as ${userName}`}
         <br />
         <Link
-          onClick={() =>
+          onClick={() => {
+            setGameState({
+              admin: -1,
+              id: -1,
+              round: -1,
+              stage: 'pre'
+            });
             setUser({
               admin: false,
               userName: ''
-            })
-          }
+            });
+          }}
           style={{ cursor: 'pointer' }}
           underline={'hover'}
         >

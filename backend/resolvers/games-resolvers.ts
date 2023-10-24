@@ -102,3 +102,18 @@ export const getParticipantsByGameResolver =
       .query(getParticipantNamesQuery)
       .then((result: QueryResult) => res.status(200).send(result.rows));
   };
+
+export const updateGameResolver = () => (req: Request, res: Response) => {
+  const { gameId, newStage } = req.body;
+
+  const updateGameQuery = `
+    update games
+    set stage = '${newStage}'
+    where id = ${gameId}
+    returning stage
+    `;
+
+  pool
+    .query(updateGameQuery)
+    .then((result: QueryResult) => res.status(200).send(result.rows[0]));
+};

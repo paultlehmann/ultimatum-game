@@ -88,3 +88,22 @@ export const getParticipantsByGame = (
       );
     });
 };
+
+export const updateGame = (gameId: number, newStage: TGameStage) => {
+  fetch('http://localhost:8008/update-game', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      gameId,
+      newStage
+    })
+  })
+    .then(async (response: Response) => {
+      // console.log('response', response);
+      // console.log('response.text()', await response.text());
+      return await response.json();
+    })
+    .then((result: { username: string }[]) => {
+      console.log('updateGame result', result);
+    });
+};

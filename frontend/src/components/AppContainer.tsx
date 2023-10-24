@@ -1,19 +1,24 @@
 import { ReactNode } from 'react';
 import TopHeader from './TopHeader';
-import { IUser, SetState } from '../types';
+import { IGameState, IUser, SetState } from '../types';
 
 interface IProps {
   children: ReactNode;
+  setGameState: SetState<IGameState>;
   setUser: SetState<IUser>;
   userName: string;
 }
 
 const AppContainer = (props: IProps) => {
-  const { children, setUser, userName } = props;
+  const { children, setGameState, setUser, userName } = props;
 
   return (
     <>
-      <TopHeader setUser={setUser} userName={userName} />
+      <TopHeader
+        setGameState={setGameState}
+        setUser={setUser}
+        userName={userName}
+      />
       <div
         style={{
           height: '85vh',

@@ -35,7 +35,11 @@ const App = () => {
     );
   } else {
     return (
-      <AppContainer userName={user.userName} setUser={setUser}>
+      <AppContainer
+        userName={user.userName}
+        setGameState={setGameState}
+        setUser={setUser}
+      >
         {user.admin ? (
           <ManageGame
             gameState={gameState}

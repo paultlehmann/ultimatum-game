@@ -10,7 +10,8 @@ import ButtonWithRefresh from './ButtonWithRefresh';
 import {
   checkForGames,
   createGame,
-  getParticipantsByGame
+  getParticipantsByGame,
+  updateGame
 } from '../queries/games';
 import { IGameState, SetState, TGameStage } from '../types';
 
@@ -54,6 +55,17 @@ const ManageGame = (props: IProps) => {
               size={'medium'}
               text={'Refresh Player List'}
             />
+            <br />
+            <Button
+              onClick={() => {
+                updateGame(gameState.id, 'offer');
+                setGameState({ ...gameState, stage: 'offer' });
+              }}
+              style={{ marginTop: '5px' }}
+              variant={'contained'}
+            >
+              Start Game with Current Players
+            </Button>
           </>
         );
     }

@@ -8,7 +8,8 @@ import {
 import {
   checkForGamesResolver,
   createGameResolver,
-  getParticipantsByGameResolver
+  getParticipantsByGameResolver,
+  updateGameResolver
 } from './resolvers/games-resolvers';
 import { createUserResolver } from './resolvers/login-resolvers';
 import {
@@ -50,6 +51,8 @@ app.post('/save-offer', saveOfferResolver());
 app.post('/create-game', createGameResolver());
 
 app.post('/get-participants-by-game', getParticipantsByGameResolver());
+
+app.post('/update-game', updateGameResolver());
 
 // app.get('/get-offers', (req: Request, res: Response) => {
 //   //   console.log('resolver hit');
