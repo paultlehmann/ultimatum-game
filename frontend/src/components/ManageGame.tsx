@@ -1,22 +1,33 @@
 import { useEffect, useState } from 'react';
-import { Button } from '@mui/material';
+import {
+  // Box,
+  Button,
+  Card,
+  CardContent
+} from '@mui/material';
 import _ from 'lodash';
 import ButtonWithRefresh from './ButtonWithRefresh';
-import { checkForGames, createGame } from '../queries/games';
+import {
+  checkForGames,
+  createGame,
+  getParticipantsByGame
+} from '../queries/games';
 import { IGameState, SetState, TGameStage } from '../types';
 
 interface IProps {
+  gameState: IGameState;
   setGameState: SetState<IGameState>;
   userId: number;
 }
 
 const ManageGame = (props: IProps) => {
-  const { setGameState, userId } = props;
+  const { gameState, setGameState, userId } = props;
 
   const [checkedForGames, setCheckedForGames] = useState<boolean>(false);
   const [gameQueryResult, setGameQueryResult] = useState<IGameState | null>(
     null
   );
+  const [participantNames, setParticipantNames] = useState<string[]>([]);
 
   useEffect(
     () => console.log('new ManageGame gameQueryResult', gameQueryResult),
@@ -26,6 +37,40 @@ const ManageGame = (props: IProps) => {
   const stages: TGameStage[] = ['pre', 'offer', 'accept'];
 
   //  checkForGames(setGameQueryResult, { admin: userId, stages });
+
+  const getGameBoxContent = () => {
+    switch (gameState.stage) {
+      case 'pre':
+        return (
+          <>
+            <div style={{ marginBottom: '5px' }}>
+              Players ({participantNames.length}):{' '}
+              {participantNames.join(', ') || 'None'}
+            </div>
+            <ButtonWithRefresh
+              onClick={() =>
+                getParticipantsByGame(gameState.id, setParticipantNames)
+              }
+              size={'medium'}
+              text={'Refresh Player List'}
+            />
+          </>
+        );
+    }
+  };
+
+  if (gameState.id !== -1) {
+    return (
+      <Card>
+        <CardContent>
+          <div>Game ID: {gameState.id}</div>
+          <div>Round: {gameState.round}</div>
+          <div>Stage: {gameState.stage}</div>
+          {getGameBoxContent()}
+        </CardContent>
+      </Card>
+    );
+  }
 
   if (gameQueryResult) {
     console.log('secondhit');

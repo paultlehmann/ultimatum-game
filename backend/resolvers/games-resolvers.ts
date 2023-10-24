@@ -85,3 +85,20 @@ export const createGameResolver = () => (req: Request, res: Response) => {
     .query(insertQuery)
     .then((result: QueryResult) => res.status(200).send(result.rows[0]));
 };
+
+export const getParticipantsByGameResolver =
+  () => (req: Request, res: Response) => {
+    const { gameId } = req.body;
+
+    const getParticipantNamesQuery = `
+  with participant_ids as (
+    select unnest(participants) as id from games where id = ${gameId}
+    )
+    select username from users
+    join participant_ids on users.id = participant_ids.id
+    `;
+
+    pool
+      .query(getParticipantNamesQuery)
+      .then((result: QueryResult) => res.status(200).send(result.rows));
+  };

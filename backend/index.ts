@@ -7,7 +7,8 @@ import {
 // import { IOffer } from './types';
 import {
   checkForGamesResolver,
-  createGameResolver
+  createGameResolver,
+  getParticipantsByGameResolver
 } from './resolvers/games-resolvers';
 import { createUserResolver } from './resolvers/login-resolvers';
 import {
@@ -47,6 +48,8 @@ app.post('/create-user', createUserResolver());
 app.post('/save-offer', saveOfferResolver());
 
 app.post('/create-game', createGameResolver());
+
+app.post('/get-participants-by-game', getParticipantsByGameResolver());
 
 // app.get('/get-offers', (req: Request, res: Response) => {
 //   //   console.log('resolver hit');

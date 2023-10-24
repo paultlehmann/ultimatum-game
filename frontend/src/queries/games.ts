@@ -64,3 +64,27 @@ export const createGame = (
       });
     });
 };
+
+export const getParticipantsByGame = (
+  gameId: number,
+  setParticipantNames: SetState<string[]>
+) => {
+  fetch('http://localhost:8008/get-participants-by-game', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      gameId
+    })
+  })
+    .then(async (response: Response) => {
+      // console.log('response', response);
+      // console.log('response.text()', await response.text());
+      return await response.json();
+    })
+    .then((result: { username: string }[]) => {
+      console.log('getParticipantsByGame result', result);
+      setParticipantNames(
+        result.map((result: { username: string }) => result.username)
+      );
+    });
+};

@@ -4,15 +4,16 @@ import { Sync } from '@mui/icons-material';
 
 interface IProps {
   onClick: MouseEventHandler<HTMLButtonElement>;
+  size?: 'small' | 'medium' | 'large';
   text: string;
 }
 
 const ButtonWithRefresh = (props: IProps) => {
-  const { onClick, text } = props;
+  const { onClick, size, text } = props;
 
   return (
     <Button
-      size={'large'}
+      size={size || 'large'}
       variant={'contained'}
       endIcon={<Sync />}
       onClick={onClick}
