@@ -65,10 +65,12 @@ export const checkForGamesResolver = () => (req: Request, res: Response) => {
   console.log('query', `SELECT * FROM games ${wheres}`);
 
   // const checkForGames = async () => {
-  pool.query(`SELECT * FROM games ${wheres}`).then((result: QueryResult) => {
-    // console.log('checkForGames result', result);
-    return res.status(200).send(result.rows);
-  });
+  pool
+    .query(`SELECT * FROM games ${wheres} order by id desc`)
+    .then((result: QueryResult) => {
+      // console.log('checkForGames result', result);
+      return res.status(200).send(result.rows);
+    });
   // };
 
   // return checkForGames();
@@ -117,3 +119,20 @@ export const updateGameResolver = () => (req: Request, res: Response) => {
     .query(updateGameQuery)
     .then((result: QueryResult) => res.status(200).send(result.rows[0]));
 };
+
+export const addParticipantToGameResolver =
+  () => (req: Request, res: Response) => {
+    const { gameId, userId } = req.body;
+
+    const addParticipantQuery = `
+  update games
+  set participants = array_append(participants, ${userId})
+  where id = ${gameId}
+  `;
+
+    console.log('addParticipantQuery', addParticipantQuery);
+
+    pool
+      .query(addParticipantQuery)
+      .then((result: QueryResult) => res.status(200).send());
+  };

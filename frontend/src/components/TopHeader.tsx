@@ -26,13 +26,14 @@ const TopHeader = (props: IProps) => {
         <Link
           onClick={() => {
             setGameState({
-              admin: -1,
-              id: -1,
-              round: -1,
+              admin: 0,
+              id: 0,
+              round: 0,
               stage: 'pre'
             });
             setUser({
               admin: false,
+              id: 0,
               userName: ''
             });
           }}

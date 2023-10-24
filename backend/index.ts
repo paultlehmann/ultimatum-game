@@ -6,6 +6,7 @@ import {
 // import _ from 'lodash';
 // import { IOffer } from './types';
 import {
+  addParticipantToGameResolver,
   checkForGamesResolver,
   createGameResolver,
   getParticipantsByGameResolver,
@@ -53,6 +54,8 @@ app.post('/create-game', createGameResolver());
 app.post('/get-participants-by-game', getParticipantsByGameResolver());
 
 app.post('/update-game', updateGameResolver());
+
+app.post('/add-participant-to-game', addParticipantToGameResolver());
 
 // app.get('/get-offers', (req: Request, res: Response) => {
 //   //   console.log('resolver hit');

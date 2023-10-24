@@ -11,14 +11,15 @@ import { IGameState, IUser } from './types';
 const App = () => {
   const [user, setUser] = useState<IUser>({
     admin: false,
+    id: 0,
     userName: ''
   });
 
   const [gameState, setGameState] = useState<IGameState>({
     // participants: [],
-    admin: -1,
-    id: -1,
-    round: -1,
+    admin: 0,
+    id: 0,
+    round: 0,
     stage: 'pre'
   });
 
@@ -36,18 +37,18 @@ const App = () => {
   } else {
     return (
       <AppContainer
-        userName={user.userName}
         setGameState={setGameState}
         setUser={setUser}
+        userName={user.userName}
       >
         {user.admin ? (
           <ManageGame
             gameState={gameState}
             setGameState={setGameState}
-            userId={user.id || -1}
+            userId={user.id || 0}
           />
         ) : gameState.stage === 'pre' ? (
-          <GameLobby />
+          <GameLobby setGameState={setGameState} userId={user.id} />
         ) : (
           <MakeOffer />
         )}

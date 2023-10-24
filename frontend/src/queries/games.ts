@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { IGameState, SetState, TGameStage } from '../types';
+import { IGameRow, IGameState, SetState, TGameStage } from '../types';
 
 interface IGameQueryOptions {
   admin?: number;
@@ -9,7 +9,10 @@ interface IGameQueryOptions {
 
 export const checkForGames =
   // (ev: MouseEvent<HTMLButtonElement>) =>
-  (setResult: SetState<IGameState | null>, options: IGameQueryOptions) => {
+  (
+    setGameQueryResult: SetState<IGameRow | null>,
+    options: IGameQueryOptions
+  ) => {
     console.log('checkForGames hit');
     fetch('http://localhost:8008/check-for-games', {
       method: 'POST',
@@ -27,10 +30,10 @@ export const checkForGames =
         // console.log('hit1');
         return response.json();
       })
-      .then((result: IGameState[]) => {
+      .then((result: IGameRow[]) => {
         if (!_.isEmpty(result)) {
           // console.log('hit2');
-          setResult(result[0]);
+          setGameQueryResult(result[0]);
         }
         // return result;
       });
@@ -106,4 +109,16 @@ export const updateGame = (gameId: number, newStage: TGameStage) => {
     .then((result: { username: string }[]) => {
       console.log('updateGame result', result);
     });
+};
+
+export const addParticipantToGame = (gameId: number, userId: number) => {
+  console.log('addParticipantToGame query hit');
+  fetch('http://localhost:8008/add-participant-to-game', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      gameId,
+      userId
+    })
+  });
 };

@@ -13,7 +13,7 @@ import {
   getParticipantsByGame,
   updateGame
 } from '../queries/games';
-import { IGameState, SetState, TGameStage } from '../types';
+import { IGameRow, IGameState, SetState, TGameStage } from '../types';
 
 interface IProps {
   gameState: IGameState;
@@ -25,9 +25,7 @@ const ManageGame = (props: IProps) => {
   const { gameState, setGameState, userId } = props;
 
   const [checkedForGames, setCheckedForGames] = useState<boolean>(false);
-  const [gameQueryResult, setGameQueryResult] = useState<IGameState | null>(
-    null
-  );
+  const [gameQueryResult, setGameQueryResult] = useState<IGameRow | null>(null);
   const [participantNames, setParticipantNames] = useState<string[]>([]);
 
   useEffect(
@@ -71,7 +69,7 @@ const ManageGame = (props: IProps) => {
     }
   };
 
-  if (gameState.id !== -1) {
+  if (gameState.id) {
     return (
       <Card>
         <CardContent>
