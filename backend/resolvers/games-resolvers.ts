@@ -78,11 +78,10 @@ export const createGameResolver = () => (req: Request, res: Response) => {
   const { admin, participants } = req.body;
 
   const insertQuery = `insert into games (admin, participants)
-  values (${admin}, '{${participants.join(',')}}')`;
+  values (${admin}, '{${participants.join(',')}}')
+  returning id`;
 
-  pool.query(insertQuery);
-
-  return res
-    .status(200)
-    .send('createGameResolver Data Received: ' + JSON.stringify(req.body));
+  pool
+    .query(insertQuery)
+    .then((result: QueryResult) => res.status(200).send(result.rows[0]));
 };

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Button } from '@mui/material';
 import _ from 'lodash';
 import ButtonWithRefresh from './ButtonWithRefresh';
-import { checkForGames } from '../queries/games';
+import { checkForGames, createGame } from '../queries/games';
 import { IGameState, SetState, TGameStage } from '../types';
 
 interface IProps {
@@ -30,7 +30,7 @@ const ManageGame = (props: IProps) => {
   if (gameQueryResult) {
     console.log('secondhit');
     console.log('gameQueryResult', gameQueryResult);
-    const { admin, id, stage } = gameQueryResult;
+    const { admin, id, round, stage } = gameQueryResult;
     return (
       <>
         <div>In-progress game found. Continue?</div>
@@ -41,7 +41,7 @@ const ManageGame = (props: IProps) => {
             setGameState({
               admin,
               id,
-              round: 0,
+              round,
               stage
             })
           }
@@ -65,6 +65,14 @@ const ManageGame = (props: IProps) => {
     return (
       <>
         <div>No games found. Start new game?</div>
+        <Button
+          variant={'contained'}
+          style={{ margin: '10px 0px' }}
+          onClick={() => createGame(userId, [], setGameState)}
+        >
+          Yes
+        </Button>
+        <Button variant={'contained'}>No</Button>
       </>
     );
   }

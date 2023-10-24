@@ -5,7 +5,10 @@ import {
 } from 'pg';
 // import _ from 'lodash';
 // import { IOffer } from './types';
-import { checkForGamesResolver } from './resolvers/games-resolvers';
+import {
+  checkForGamesResolver,
+  createGameResolver
+} from './resolvers/games-resolvers';
 import { createUserResolver } from './resolvers/login-resolvers';
 import {
   getOffersResolver,
@@ -42,6 +45,8 @@ app.get('/get-offers', getOffersResolver());
 app.post('/create-user', createUserResolver());
 
 app.post('/save-offer', saveOfferResolver());
+
+app.post('/create-game', createGameResolver());
 
 // app.get('/get-offers', (req: Request, res: Response) => {
 //   //   console.log('resolver hit');
