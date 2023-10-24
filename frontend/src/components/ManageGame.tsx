@@ -92,14 +92,15 @@ const ManageGame = (props: IProps) => {
         <Button
           variant={'contained'}
           style={{ margin: '10px 0px' }}
-          onClick={() =>
+          onClick={() => {
+            getParticipantsByGame(id, setParticipantNames);
             setGameState({
               admin,
               id,
               round,
               stage
-            })
-          }
+            });
+          }}
         >
           Yes
         </Button>
