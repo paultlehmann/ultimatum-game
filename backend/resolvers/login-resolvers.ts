@@ -12,10 +12,21 @@ export const createUserResolver = () => (req: Request, res: Response) => {
     .then((result: QueryResult) => {
       // console.log('user result', result);
       if (_.isEmpty(result.rows)) {
-        pool.query(`insert into users (username, admin)
-      values ('${username}',${admin})`);
-        console.log(`new user ${username} created`);
-        return res.status(200).send({ isAdmin: false });
+        pool
+          .query(
+            `insert into users (username, admin)
+      values ('${username}',${admin})
+      returning id`
+          )
+          .then((result: QueryResult) => {
+            // console.log('create user result',result)
+            console.log(`new user ${username} created`);
+            return res
+              .status(200)
+              .send({ isAdmin: false, id: result.rows[0].id });
+          });
+        // console.log(`new user ${username} created`);
+        // return res.status(200).send({ isAdmin: false });
       } else {
         // console.log('result.rows[0]', result.rows[0]);
         console.log(`user ${username} already exists`);

@@ -53,15 +53,13 @@ const ManageGame = (props: IProps) => {
     );
   } else if (!checkedForGames) {
     return (
-      <>
-        <ButtonWithRefresh
-          onClick={() => {
-            setCheckedForGames(true);
-            checkForGames(setGameQueryResult, { admin: userId, stages });
-          }}
-          text={'Check For Games'}
-        />
-      </>
+      <ButtonWithRefresh
+        onClick={() => {
+          setCheckedForGames(true);
+          checkForGames(setGameQueryResult, { admin: userId, stages });
+        }}
+        text={'Check For Games'}
+      />
     );
   } else {
     return (

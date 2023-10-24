@@ -17,8 +17,8 @@ const App = () => {
   const [gameState, setGameState] = useState<IGameState>({
     // participants: [],
     admin: -1,
-    id: undefined,
-    round: 1,
+    id: -1,
+    round: -1,
     stage: 'pre'
   });
 

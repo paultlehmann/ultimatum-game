@@ -9,7 +9,7 @@ export interface IUser {
 export interface IGameState {
   // participants: number[];
   admin: number;
-  id?: number;
+  id: number;
   round: number;
   stage: TGameStage;
 }
