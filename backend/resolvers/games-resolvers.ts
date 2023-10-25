@@ -7,12 +7,14 @@ type TGameStage = 'pre' | 'offer' | 'accept' | 'post';
 
 interface IGameQueryOptions {
   admin?: number;
+  id?: number;
   participant?: number;
   stages?: TGameStage[];
 }
 
 interface IAdjustedValues extends Record<number, string> {
   admin?: number;
+  id?: number;
   // participants?: string;
   // stage?: `'${TGameStage}'`;
   stage?: string;
@@ -20,7 +22,7 @@ interface IAdjustedValues extends Record<number, string> {
 
 export const checkForGamesResolver = () => (req: Request, res: Response) => {
   // console.log('resolver hit');
-  const { admin, participant, stages }: IGameQueryOptions = req.body;
+  const { admin, id, participant, stages }: IGameQueryOptions = req.body;
 
   console.log('checkForGamesResolver args', req.body);
 
@@ -29,6 +31,10 @@ export const checkForGamesResolver = () => (req: Request, res: Response) => {
   if (admin) {
     // adjustedValues.admin = `(select id from users where username = '${admin}')`;
     adjustedValues.admin = admin;
+  }
+
+  if (id) {
+    adjustedValues.id = id;
   }
 
   if (participant) {
@@ -61,16 +67,15 @@ export const checkForGamesResolver = () => (req: Request, res: Response) => {
     )
     ?.join('');
 
-  // console.log('wheres', wheres);
-  console.log('query', `SELECT * FROM games ${wheres}`);
+  const checkForGamesQuery = `SELECT * FROM games ${wheres} order by id desc`;
+
+  console.log('checkForGamesQuery', checkForGamesQuery);
 
   // const checkForGames = async () => {
-  pool
-    .query(`SELECT * FROM games ${wheres} order by id desc`)
-    .then((result: QueryResult) => {
-      // console.log('checkForGames result', result);
-      return res.status(200).send(result.rows);
-    });
+  pool.query(checkForGamesQuery).then((result: QueryResult) => {
+    // console.log('checkForGames result', result);
+    return res.status(200).send(result.rows);
+  });
   // };
 
   // return checkForGames();

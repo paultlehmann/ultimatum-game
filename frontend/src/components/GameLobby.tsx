@@ -55,7 +55,7 @@ const GameLobby = (props: IProps) => {
           </>
         );
       case 'offer':
-        return <MakeOffer setGameState={setGameState} userId={userId} />;
+        return <MakeOffer gameId={gameState.id} setGameState={setGameState} />;
     }
   }
 

@@ -4,7 +4,6 @@ import LoginPage from './components/LoginPage';
 // import TopHeader from './components/TopHeader'
 import AppContainer from './components/AppContainer';
 import GameLobby from './components/GameLobby';
-import MakeOffer from './components/MakeOffer';
 import ManageGame from './components/ManageGame';
 import { IGameState, IUser } from './types';
 
@@ -45,16 +44,14 @@ const App = () => {
           <ManageGame
             gameState={gameState}
             setGameState={setGameState}
-            userId={user.id || 0}
+            userId={user.id}
           />
-        ) : gameState.stage === 'pre' ? (
+        ) : (
           <GameLobby
             gameState={gameState}
             setGameState={setGameState}
             userId={user.id}
           />
-        ) : (
-          <MakeOffer />
         )}
       </AppContainer>
     );

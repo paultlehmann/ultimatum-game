@@ -12,21 +12,21 @@ import {
   InputAdornment,
   TextField
 } from '@mui/material';
+import ButtonWithRefresh from './ButtonWithRefresh';
 import {
   // getOffers,
   saveOffer
 } from '../queries/make-offer';
-import ButtonWithRefresh from './ButtonWithRefresh';
 import { checkForGames } from '../queries/games';
 import { IGameState, SetState } from '../types';
 
 interface IProps {
+  gameId: number;
   setGameState: SetState<IGameState>;
-  userId: number;
 }
 
 const MakeOffer = (props: IProps) => {
-  const { setGameState, userId } = props;
+  const { gameId, setGameState } = props;
 
   const [offer, setOffer] = useState<number>(5);
   const [offerSubmitted, setOfferSubmitted] = useState<boolean>(false);
@@ -130,7 +130,8 @@ const MakeOffer = (props: IProps) => {
           text={'Refresh'}
           onClick={() =>
             checkForGames(
-              { stages: ['accept'], participant: userId },
+              // { stages: ['accept'], participant: userId },
+              { id: gameId },
               undefined,
               setGameState
             )

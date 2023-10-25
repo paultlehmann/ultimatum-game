@@ -3,6 +3,7 @@ import { IGameRow, IGameState, SetState, TGameStage } from '../types';
 
 interface IGameQueryOptions {
   admin?: number;
+  id?: number;
   participant?: number;
   stages?: TGameStage[];
 }
