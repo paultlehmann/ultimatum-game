@@ -101,6 +101,8 @@ const ManageGame = (props: IProps) => {
                       )
                     );
 
+                    updateGame(gameState.id, 'accept');
+
                     setGameState({ ...gameState, stage: 'accept' });
                   }}
                 />

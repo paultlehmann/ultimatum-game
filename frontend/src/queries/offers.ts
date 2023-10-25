@@ -1,14 +1,47 @@
-import { SetState } from '../types';
+import { IOffer, SetState } from '../types';
 
-export const getOffers = (setOfferData: (newVal: any) => void) => {
-  fetch('http://localhost:8008/get-offers')
+// export const getOffers = (setOfferData: (newVal: any) => void) => {
+//   fetch('http://localhost:8008/get-offers')
+//     .then(async (response: Response) => {
+//       // console.log('response', response);
+//       // console.log('response.text()', await response.text());
+//       return response.text();
+//     })
+//     .then((data) => {
+//       setOfferData(data);
+//     });
+// };
+
+export const getOffers = (
+  setOffer: SetState<IOffer | null>,
+  gameId: number,
+  round: number,
+  id?: number,
+  recipient?: number
+) => {
+  console.log('getOffers hit');
+  fetch('http://localhost:8008/get-offers', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      gameId,
+      round,
+      id,
+      recipient
+    })
+  })
     .then(async (response: Response) => {
       // console.log('response', response);
       // console.log('response.text()', await response.text());
-      return response.text();
+      return response.json();
     })
-    .then((data) => {
-      setOfferData(data);
+    .then((data: any) => {
+      const { id, amount } = data.rows[0];
+      setOffer({
+        id,
+        amount
+      });
+      // console.log('getOffers return', data);
     });
 };
 

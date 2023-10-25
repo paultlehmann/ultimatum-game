@@ -64,7 +64,7 @@ const GameLobby = (props: IProps) => {
           />
         );
       case 'accept':
-        return <AcceptOffer />;
+        return <AcceptOffer gameState={gameState} userId={userId} />;
     }
   }
 

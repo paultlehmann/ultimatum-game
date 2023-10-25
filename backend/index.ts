@@ -45,7 +45,7 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 
 app.post('/check-for-games', checkForGamesResolver());
 
-app.get('/get-offers', getOffersResolver());
+app.post('/get-offers', getOffersResolver());
 
 app.post('/create-user', createUserResolver());
 

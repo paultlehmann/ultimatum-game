@@ -22,6 +22,7 @@ export type TGameStage = 'pre' | 'offer' | 'accept' | 'post';
 
 export type SetState<Type> = Dispatch<SetStateAction<Type>>;
 
-// export interface SetState<Type> {
-//   (value: Type): Dispatch<SetStateAction<Type>>;
-// }
+export interface IOffer {
+  amount: number;
+  id: number;
+}
