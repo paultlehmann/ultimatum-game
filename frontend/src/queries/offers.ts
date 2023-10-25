@@ -57,3 +57,27 @@ export const checkOfferStatuses = (
       );
     });
 };
+
+export const shuffleAndAssignOffers = (
+  gameId: number,
+  round: number,
+  userName: string
+) => {
+  fetch('http://localhost:8008/shuffle-and-assign-offers', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      gameId,
+      round,
+      userName
+    })
+  })
+    .then(async (response: Response) => {
+      // console.log('response', response);
+      // console.log('response.text()', await response.text());
+      return response.json();
+    })
+    .then((data: any) => {
+      console.log('shuffleAndAssignOffers data', data);
+    });
+};

@@ -16,7 +16,8 @@ import { createUserResolver } from './resolvers/login-resolvers';
 import {
   checkOfferStatusesResolver,
   getOffersResolver,
-  saveOfferResolver
+  saveOfferResolver,
+  shuffleAndAssignOffersResolver
 } from './resolvers/offers-resolvers';
 
 const app: Express = express();
@@ -59,6 +60,8 @@ app.post('/update-game', updateGameResolver());
 app.post('/add-participant-to-game', addParticipantToGameResolver());
 
 app.post('/check-offer-statuses', checkOfferStatusesResolver());
+
+app.post('/shuffle-and-assign-offers', shuffleAndAssignOffersResolver());
 
 // app.get('/get-offers', (req: Request, res: Response) => {
 //   //   console.log('resolver hit');

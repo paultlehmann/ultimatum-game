@@ -37,7 +37,7 @@ export const saveOfferResolver = () => (req: Request, res: Response) => {
 
 export const checkOfferStatusesResolver =
   () => (req: Request, res: Response) => {
-    const { gameId, round } = req.body;
+    const { gameId, round, userName } = req.body;
 
     const checkStatusesQuery = `
   select users.username from offers 
@@ -48,4 +48,23 @@ export const checkOfferStatusesResolver =
     pool
       .query(checkStatusesQuery)
       .then((result: QueryResult) => res.status(200).send(result));
+  };
+
+export const shuffleAndAssignOffersResolver =
+  () => (req: Request, res: Response) => {
+    const { gameId, round, userName } = req.body;
+
+    const query = `
+  update offers
+  set recipient_id = (
+  select coalesce(participants[(array_position(participants, (select id from users where username = '${userName}')) + ${round})], participants[1])
+  from games
+  where id = ${gameId}
+  )
+  where game_id = ${gameId} and round_number = ${round} and offerer_id = (select id from users where username = '${userName}')
+  `;
+
+    pool.query(query).then((result: QueryResult) => res.status(200));
+
+    console.log('shuffleAndAssignOffersResolver query', query);
   };

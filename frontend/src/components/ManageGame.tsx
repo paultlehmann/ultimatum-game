@@ -14,7 +14,7 @@ import {
   updateGame
 } from '../queries/games';
 import { IGameRow, IGameState, SetState, TGameStage } from '../types';
-import { checkOfferStatuses } from '../queries/offers';
+import { checkOfferStatuses, shuffleAndAssignOffers } from '../queries/offers';
 
 interface IProps {
   gameState: IGameState;
@@ -80,12 +80,32 @@ const ManageGame = (props: IProps) => {
               Waiting For:{' '}
               {_.pullAll(participantNames, offersIn).join(', ') || 'None'}
             </div>
-            <ButtonWithRefresh
-              onClick={() =>
-                checkOfferStatuses(gameState.id, gameState.round, setOffersIn)
-              }
-              text={'Refresh'}
-            />
+            {_.isEmpty(_.pullAll(participantNames, offersIn)) ? (
+              <ButtonWithRefresh
+                onClick={() =>
+                  checkOfferStatuses(gameState.id, gameState.round, setOffersIn)
+                }
+                text={'Refresh'}
+              />
+            ) : (
+              <>
+                <div>All Offers In!</div>
+                <ButtonWithRefresh
+                  text={'Start Accept/Reject Phase'}
+                  onClick={() => {
+                    participantNames.forEach((participantName: string) =>
+                      shuffleAndAssignOffers(
+                        gameState.id,
+                        gameState.round,
+                        participantName
+                      )
+                    );
+
+                    setGameState({ ...gameState, stage: 'accept' });
+                  }}
+                />
+              </>
+            )}
           </>
         );
     }
