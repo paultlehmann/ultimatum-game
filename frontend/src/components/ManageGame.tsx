@@ -14,6 +14,7 @@ import {
   updateGame
 } from '../queries/games';
 import { IGameRow, IGameState, SetState, TGameStage } from '../types';
+import { checkOfferStatuses } from '../queries/offers';
 
 interface IProps {
   gameState: IGameState;
@@ -27,6 +28,7 @@ const ManageGame = (props: IProps) => {
   const [checkedForGames, setCheckedForGames] = useState<boolean>(false);
   const [gameQueryResult, setGameQueryResult] = useState<IGameRow | null>(null);
   const [participantNames, setParticipantNames] = useState<string[]>([]);
+  const [offersIn, setOffersIn] = useState<string[]>([]);
 
   useEffect(
     () => console.log('new ManageGame gameQueryResult', gameQueryResult),
@@ -68,6 +70,22 @@ const ManageGame = (props: IProps) => {
                 </Button>
               </>
             )}
+          </>
+        );
+      case 'offer':
+        return (
+          <>
+            <div>Offers In: {offersIn.join(', ') || 'None'}</div>
+            <div>
+              Waiting For:{' '}
+              {_.pullAll(participantNames, offersIn).join(', ') || 'None'}
+            </div>
+            <ButtonWithRefresh
+              onClick={() =>
+                checkOfferStatuses(gameState.id, gameState.round, setOffersIn)
+              }
+              text={'Refresh'}
+            />
           </>
         );
     }

@@ -14,6 +14,7 @@ import {
 } from './resolvers/games-resolvers';
 import { createUserResolver } from './resolvers/login-resolvers';
 import {
+  checkOfferStatusesResolver,
   getOffersResolver,
   saveOfferResolver
 } from './resolvers/offers-resolvers';
@@ -56,6 +57,8 @@ app.post('/get-participants-by-game', getParticipantsByGameResolver());
 app.post('/update-game', updateGameResolver());
 
 app.post('/add-participant-to-game', addParticipantToGameResolver());
+
+app.post('/check-offer-statuses', checkOfferStatusesResolver());
 
 // app.get('/get-offers', (req: Request, res: Response) => {
 //   //   console.log('resolver hit');

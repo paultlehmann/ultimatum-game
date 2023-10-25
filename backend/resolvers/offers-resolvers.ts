@@ -34,3 +34,18 @@ export const saveOfferResolver = () => (req: Request, res: Response) => {
 
   return res.status(200).send('Data Received: ' + JSON.stringify(req.body));
 };
+
+export const checkOfferStatusesResolver =
+  () => (req: Request, res: Response) => {
+    const { gameId, round } = req.body;
+
+    const checkStatusesQuery = `
+  select users.username from offers 
+  join users on offers.offerer_id = users.id
+  where game_id = ${gameId} and round_number = ${round}
+  `;
+
+    pool
+      .query(checkStatusesQuery)
+      .then((result: QueryResult) => res.status(200).send(result));
+  };
