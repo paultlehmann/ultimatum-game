@@ -1,16 +1,18 @@
 import { useEffect, useState } from 'react';
 import { Button } from '@mui/material';
 import ButtonWithRefresh from './ButtonWithRefresh';
+import MakeOffer from './MakeOffer';
 import { addParticipantToGame, checkForGames } from '../queries/games';
 import { IGameRow, IGameState, SetState, TGameStage } from '../types';
 
 interface IProps {
+  gameState: IGameState;
   setGameState: SetState<IGameState>;
   userId: number;
 }
 
 const GameLobby = (props: IProps) => {
-  const { setGameState, userId } = props;
+  const { gameState, setGameState, userId } = props;
 
   const [checkedForGames, setCheckedForGames] = useState<boolean>(false);
   const [gameQueryResult, setGameQueryResult] = useState<IGameRow | null>(null);
@@ -33,6 +35,29 @@ const GameLobby = (props: IProps) => {
   //     />
   //   </>
   // );
+
+  if (gameState.id) {
+    switch (gameState.stage) {
+      case 'pre':
+        return (
+          <>
+            <div>Host has not started game yet.</div>
+            <ButtonWithRefresh
+              onClick={() =>
+                checkForGames(
+                  setGameQueryResult,
+                  { participant: userId, stages: stagesToCheck },
+                  setGameState
+                )
+              }
+              text={'Check Again'}
+            />
+          </>
+        );
+      case 'offer':
+        return <MakeOffer />;
+    }
+  }
 
   if (gameQueryResult) {
     // console.log('secondhit');

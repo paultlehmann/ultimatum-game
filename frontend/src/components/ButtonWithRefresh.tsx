@@ -17,6 +17,7 @@ const ButtonWithRefresh = (props: IProps) => {
       variant={'contained'}
       endIcon={<Sync />}
       onClick={onClick}
+      style={{ margin: '5px 0px' }}
     >
       {text}
     </Button>

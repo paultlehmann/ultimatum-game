@@ -48,7 +48,11 @@ const App = () => {
             userId={user.id || 0}
           />
         ) : gameState.stage === 'pre' ? (
-          <GameLobby setGameState={setGameState} userId={user.id} />
+          <GameLobby
+            gameState={gameState}
+            setGameState={setGameState}
+            userId={user.id}
+          />
         ) : (
           <MakeOffer />
         )}

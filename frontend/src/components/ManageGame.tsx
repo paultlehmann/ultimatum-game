@@ -53,17 +53,21 @@ const ManageGame = (props: IProps) => {
               size={'medium'}
               text={'Refresh Player List'}
             />
-            <br />
-            <Button
-              onClick={() => {
-                updateGame(gameState.id, 'offer');
-                setGameState({ ...gameState, stage: 'offer' });
-              }}
-              style={{ marginTop: '5px' }}
-              variant={'contained'}
-            >
-              Start Game with Current Players
-            </Button>
+            {participantNames.length > 2 && (
+              <>
+                <br />
+                <Button
+                  onClick={() => {
+                    updateGame(gameState.id, 'offer');
+                    setGameState({ ...gameState, stage: 'offer' });
+                  }}
+                  style={{ marginTop: '5px' }}
+                  variant={'contained'}
+                >
+                  Start Game with Current Players
+                </Button>
+              </>
+            )}
           </>
         );
     }

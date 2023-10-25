@@ -11,7 +11,8 @@ export const checkForGames =
   // (ev: MouseEvent<HTMLButtonElement>) =>
   (
     setGameQueryResult: SetState<IGameRow | null>,
-    options: IGameQueryOptions
+    options: IGameQueryOptions,
+    setGameState?: SetState<IGameState>
   ) => {
     console.log('checkForGames hit');
     fetch('http://localhost:8008/check-for-games', {
@@ -32,8 +33,15 @@ export const checkForGames =
       })
       .then((result: IGameRow[]) => {
         if (!_.isEmpty(result)) {
-          // console.log('hit2');
+          console.log('checkForGames result', result);
           setGameQueryResult(result[0]);
+          if (setGameState) {
+            setGameState((prevState: IGameState) => ({
+              ...prevState,
+              stage: result[0].stage,
+              round: result[0].round
+            }));
+          }
         }
         // return result;
       });
