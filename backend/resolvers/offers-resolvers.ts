@@ -37,12 +37,27 @@ export const saveOfferResolver = () => (req: Request, res: Response) => {
 
 export const checkOfferStatusesResolver =
   () => (req: Request, res: Response) => {
-    const { gameId, round, userName } = req.body;
+    const { gameId, round } = req.body;
 
     const checkStatusesQuery = `
   select users.username from offers 
   join users on offers.offerer_id = users.id
   where game_id = ${gameId} and round_number = ${round}
+  `;
+
+    pool
+      .query(checkStatusesQuery)
+      .then((result: QueryResult) => res.status(200).send(result));
+  };
+
+export const checkAcceptStatusesResolver =
+  () => (req: Request, res: Response) => {
+    const { gameId, round } = req.body;
+
+    const checkStatusesQuery = `
+    select users.username, offers.accepted from offers 
+    join users on offers.recipient_id = users.id
+    where game_id = ${gameId}} and round_number = ${round}
   `;
 
     pool
@@ -82,3 +97,18 @@ export const getOffersResolver = () => (req: Request, res: Response) => {
 
   pool.query(query).then((result: QueryResult) => res.status(200).send(result));
 };
+
+export const acceptOrRejectOfferResolver =
+  () => (req: Request, res: Response) => {
+    const { acceptOrReject, gameId, round, userId } = req.body;
+
+    const query = `
+  update offers
+  set accepted = ${acceptOrReject === 'accept' ? 'true' : 'false'}
+  where game_id = ${gameId} and round_number = ${round} and recipient_id = ${userId}
+  `;
+
+    pool
+      .query(query)
+      .then((result: QueryResult) => res.status(200).send(result));
+  };

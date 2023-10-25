@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { IOffer, SetState } from '../types';
 
 // export const getOffers = (setOfferData: (newVal: any) => void) => {
@@ -91,6 +92,38 @@ export const checkOfferStatuses = (
     });
 };
 
+export const checkAcceptStatuses = (
+  gameId: number,
+  round: number,
+  setAcceptsIn: SetState<string[]>
+) => {
+  fetch('http://localhost:8008/check-accept-statuses', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      gameId,
+      round
+    })
+  })
+    .then(async (response: Response) => {
+      // console.log('response', response);
+      // console.log('response.text()', await response.text());
+      return response.json();
+    })
+    .then((usersWhoHaveAccepted: any) => {
+      console.log('checkAcceptStatuses return', usersWhoHaveAccepted);
+      setAcceptsIn(
+        usersWhoHaveAccepted.rows.map(
+          (user: { username: string; accepted?: boolean }) => {
+            if (!_.isUndefined(user.accepted)) {
+              return user.username;
+            }
+          }
+        )
+      );
+    });
+};
+
 export const shuffleAndAssignOffers = (
   gameId: number,
   round: number,
@@ -112,5 +145,31 @@ export const shuffleAndAssignOffers = (
     })
     .then((data: any) => {
       console.log('shuffleAndAssignOffers data', data);
+    });
+};
+
+export const acceptOrRejectOffer = (
+  userId: number,
+  gameId: number,
+  round: number,
+  acceptOrReject: 'accept' | 'reject'
+) => {
+  fetch('http://localhost:8008/accept-or-reject-offer', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      acceptOrReject,
+      gameId,
+      round,
+      userId
+    })
+  })
+    .then(async (response: Response) => {
+      // console.log('response', response);
+      // console.log('response.text()', await response.text());
+      return response.json();
+    })
+    .then((data: any) => {
+      console.log('acceptOrRejectOffer data', data);
     });
 };

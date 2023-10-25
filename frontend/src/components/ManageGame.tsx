@@ -14,7 +14,11 @@ import {
   updateGame
 } from '../queries/games';
 import { IGameRow, IGameState, SetState, TGameStage } from '../types';
-import { checkOfferStatuses, shuffleAndAssignOffers } from '../queries/offers';
+import {
+  checkAcceptStatuses,
+  checkOfferStatuses,
+  shuffleAndAssignOffers
+} from '../queries/offers';
 
 interface IProps {
   gameState: IGameState;
@@ -29,6 +33,7 @@ const ManageGame = (props: IProps) => {
   const [gameQueryResult, setGameQueryResult] = useState<IGameRow | null>(null);
   const [participantNames, setParticipantNames] = useState<string[]>([]);
   const [offersIn, setOffersIn] = useState<string[]>([]);
+  const [acceptsIn, setAcceptsIn] = useState<string[]>([]);
 
   useEffect(
     () => console.log('new ManageGame gameQueryResult', gameQueryResult),
@@ -80,7 +85,8 @@ const ManageGame = (props: IProps) => {
               Waiting For:{' '}
               {_.pullAll(participantNames, offersIn).join(', ') || 'None'}
             </div>
-            {_.isEmpty(_.pullAll(participantNames, offersIn)) ? (
+            {_.isEmpty(offersIn) ||
+            _.isEmpty(_.pullAll(participantNames, offersIn)) ? (
               <ButtonWithRefresh
                 onClick={() =>
                   checkOfferStatuses(gameState.id, gameState.round, setOffersIn)
@@ -90,7 +96,25 @@ const ManageGame = (props: IProps) => {
             ) : (
               <>
                 <div>All Offers In!</div>
-                <ButtonWithRefresh
+                <Button
+                  variant={'contained'}
+                  onClick={() => {
+                    participantNames.forEach((participantName: string) =>
+                      shuffleAndAssignOffers(
+                        gameState.id,
+                        gameState.round,
+                        participantName
+                      )
+                    );
+
+                    updateGame(gameState.id, 'accept');
+
+                    setGameState({ ...gameState, stage: 'accept' });
+                  }}
+                >
+                  Start Accept/Reject Phase
+                </Button>
+                {/* <ButtonWithRefresh
                   text={'Start Accept/Reject Phase'}
                   onClick={() => {
                     participantNames.forEach((participantName: string) =>
@@ -105,7 +129,54 @@ const ManageGame = (props: IProps) => {
 
                     setGameState({ ...gameState, stage: 'accept' });
                   }}
-                />
+                /> */}
+              </>
+            )}
+          </>
+        );
+      case 'accept':
+        console.log('pullall result', _.pullAll(participantNames, acceptsIn));
+        console.log('participantNames', participantNames);
+        console.log('acceptsIn', acceptsIn);
+        return (
+          <>
+            <div>Has Accepted/Rejected: {acceptsIn.join(', ') || 'None'}</div>
+            <div>
+              Waiting For:{' '}
+              {_.pullAll(participantNames, acceptsIn).join(', ') || 'None'}
+            </div>
+            {_.isEmpty(acceptsIn) ||
+            _.isEmpty(_.pullAll(participantNames, acceptsIn)) ? (
+              <ButtonWithRefresh
+                onClick={() =>
+                  checkAcceptStatuses(
+                    gameState.id,
+                    gameState.round,
+                    setAcceptsIn
+                  )
+                }
+                text={'Refresh'}
+              />
+            ) : (
+              <>
+                <div>All Offers Accepted/Rejected!</div>
+                <Button
+                  onClick={() => {
+                    participantNames.forEach((participantName: string) =>
+                      shuffleAndAssignOffers(
+                        gameState.id,
+                        gameState.round,
+                        participantName
+                      )
+                    );
+
+                    updateGame(gameState.id, 'accept');
+
+                    setGameState({ ...gameState, stage: 'accept' });
+                  }}
+                >
+                  Start Accept/Reject Phase
+                </Button>
               </>
             )}
           </>

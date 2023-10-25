@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Button, Card, CardContent, CardHeader, Grid } from '@mui/material';
 import _ from 'lodash';
-import { getOffers } from '../queries/offers';
+import { acceptOrRejectOffer, getOffers } from '../queries/offers';
 import { IGameState, IOffer } from '../types';
 
 interface IProps {
@@ -62,10 +62,36 @@ const AcceptOffer = (props: IProps) => {
             }}
           >
             <Grid item={true}>
-              <Button variant={'contained'}>Accept</Button>
+              <Button
+                variant={'contained'}
+                color={'success'}
+                onClick={() =>
+                  acceptOrRejectOffer(
+                    userId,
+                    gameState.id,
+                    gameState.round,
+                    'accept'
+                  )
+                }
+              >
+                Accept
+              </Button>
             </Grid>
             <Grid item={true}>
-              <Button variant={'contained'}>Reject</Button>
+              <Button
+                variant={'contained'}
+                color={'error'}
+                onClick={() =>
+                  acceptOrRejectOffer(
+                    userId,
+                    gameState.id,
+                    gameState.round,
+                    'reject'
+                  )
+                }
+              >
+                Reject
+              </Button>
             </Grid>
           </Grid>
         </CardContent>
