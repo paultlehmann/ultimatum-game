@@ -10,15 +10,20 @@ export const getOffers = (setOfferData: (newVal: any) => void) => {
     });
 };
 
-export const saveOffer = (amount: number) => {
+export const saveOffer = (
+  amount: number,
+  gameId: number,
+  round: number,
+  userId: number
+) => {
   fetch('http://localhost:8008/save-offer', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       amount,
-      game_id: 0,
-      offerer_id: 0,
-      round_number: 1
+      game_id: gameId,
+      offerer_id: userId,
+      round_number: round
     })
   });
 };

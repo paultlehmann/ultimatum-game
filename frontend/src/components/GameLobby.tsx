@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Button } from '@mui/material';
 import ButtonWithRefresh from './ButtonWithRefresh';
+import AcceptOffer from './AcceptOffer';
 import MakeOffer from './MakeOffer';
 import { addParticipantToGame, checkForGames } from '../queries/games';
 import { IGameRow, IGameState, SetState, TGameStage } from '../types';
@@ -55,7 +56,15 @@ const GameLobby = (props: IProps) => {
           </>
         );
       case 'offer':
-        return <MakeOffer gameId={gameState.id} setGameState={setGameState} />;
+        return (
+          <MakeOffer
+            gameState={gameState}
+            setGameState={setGameState}
+            userId={userId}
+          />
+        );
+      case 'accept':
+        return <AcceptOffer />;
     }
   }
 

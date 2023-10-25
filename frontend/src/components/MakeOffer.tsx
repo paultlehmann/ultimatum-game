@@ -1,6 +1,6 @@
 import {
   ChangeEvent,
-  FocusEvent,
+  // FocusEvent,
   // useEffect,
   useState
 } from 'react';
@@ -16,17 +16,18 @@ import ButtonWithRefresh from './ButtonWithRefresh';
 import {
   // getOffers,
   saveOffer
-} from '../queries/make-offer';
+} from '../queries/offers';
 import { checkForGames } from '../queries/games';
 import { IGameState, SetState } from '../types';
 
 interface IProps {
-  gameId: number;
+  gameState: IGameState;
   setGameState: SetState<IGameState>;
+  userId: number;
 }
 
 const MakeOffer = (props: IProps) => {
-  const { gameId, setGameState } = props;
+  const { gameState, setGameState, userId } = props;
 
   const [offer, setOffer] = useState<number>(5);
   const [offerSubmitted, setOfferSubmitted] = useState<boolean>(false);
@@ -40,10 +41,10 @@ const MakeOffer = (props: IProps) => {
 
   // useEffect(() => console.log('new offerData', offerData), [offerData]);
 
-  const handleSubmitOfferClick = (ev: FocusEvent<HTMLInputElement>) => {
-    console.log(`setting offer to ${ev.target.value}`);
-    // setOffer(Number(ev.target.value));
-  };
+  // const handleSubmitOfferClick = (ev: FocusEvent<HTMLInputElement>) => {
+  //   console.log(`setting offer to ${ev.target.value}`);
+  //   // setOffer(Number(ev.target.value));
+  // };
 
   if (!offerSubmitted) {
     return (
@@ -79,9 +80,9 @@ const MakeOffer = (props: IProps) => {
                 // paddingRight: '6px'
               }
             }}
-            onBlur={(ev: FocusEvent<HTMLInputElement>) =>
-              handleSubmitOfferClick(ev)
-            }
+            // onBlur={(ev: FocusEvent<HTMLInputElement>) =>
+            //   handleSubmitOfferClick(ev)
+            // }
             onChange={(ev: ChangeEvent<HTMLInputElement>) => {
               if (Number(ev.target.value) > 10) {
                 // ev.target.value = '10';
@@ -110,7 +111,7 @@ const MakeOffer = (props: IProps) => {
           <br />
           <Button
             onClick={() => {
-              saveOffer(offer);
+              saveOffer(offer, gameState.id, gameState.round, userId);
               setOfferSubmitted(true);
             }}
             // style={{ marginTop: '5px' }}
@@ -131,7 +132,7 @@ const MakeOffer = (props: IProps) => {
           onClick={() =>
             checkForGames(
               // { stages: ['accept'], participant: userId },
-              { id: gameId },
+              { id: gameState.id },
               undefined,
               setGameState
             )
