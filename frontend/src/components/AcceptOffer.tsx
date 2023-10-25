@@ -1,11 +1,14 @@
 import { useEffect, useState } from 'react';
 import { Button, Card, CardContent, CardHeader, Grid } from '@mui/material';
 import _ from 'lodash';
+import ButtonWithRefresh from './ButtonWithRefresh';
 import { acceptOrRejectOffer, getOffers } from '../queries/offers';
-import { IGameState, IOffer } from '../types';
+import { checkForGames } from '../queries/games';
+import { IGameState, IOffer, SetState } from '../types';
 
 interface IProps {
   gameState: IGameState;
+  setGameState: SetState<IGameState>;
   userId: number;
 }
 
@@ -16,18 +19,41 @@ interface IOpponentHistory {
 }
 
 const AcceptOffer = (props: IProps) => {
-  const { gameState, userId } = props;
+  const { gameState, setGameState, userId } = props;
 
   const [offer, setOffer] = useState<IOffer | null>(null);
   const [opponentHistory, setOpponentHistory] = useState<IOpponentHistory[]>(
     []
   );
+  const [hasAcceptedOrRejected, setHasAcceptedOrRejected] = useState<
+    'accepted' | 'rejected' | null
+  >(null);
 
   useEffect(
     () => getOffers(setOffer, gameState.id, gameState.round, undefined, userId),
     []
   );
   // return <div>{`Offer: ${offer?.amount}`}</div>;
+
+  if (hasAcceptedOrRejected) {
+    return (
+      <>
+        <div>Offer {hasAcceptedOrRejected}!</div>
+        <div>Waiting for other players to respond to offers.</div>
+        <ButtonWithRefresh
+          text={'Refresh'}
+          onClick={() =>
+            checkForGames(
+              // { stages: ['accept'], participant: userId },
+              { id: gameState.id },
+              undefined,
+              setGameState
+            )
+          }
+        />
+      </>
+    );
+  }
   return (
     offer && (
       <Card>
@@ -65,14 +91,15 @@ const AcceptOffer = (props: IProps) => {
               <Button
                 variant={'contained'}
                 color={'success'}
-                onClick={() =>
+                onClick={() => {
                   acceptOrRejectOffer(
                     userId,
                     gameState.id,
                     gameState.round,
                     'accept'
-                  )
-                }
+                  );
+                  setHasAcceptedOrRejected('accepted');
+                }}
               >
                 Accept
               </Button>
@@ -81,14 +108,15 @@ const AcceptOffer = (props: IProps) => {
               <Button
                 variant={'contained'}
                 color={'error'}
-                onClick={() =>
+                onClick={() => {
                   acceptOrRejectOffer(
                     userId,
                     gameState.id,
                     gameState.round,
                     'reject'
-                  )
-                }
+                  );
+                  setHasAcceptedOrRejected('rejected');
+                }}
               >
                 Reject
               </Button>

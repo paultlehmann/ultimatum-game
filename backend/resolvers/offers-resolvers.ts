@@ -57,8 +57,10 @@ export const checkAcceptStatusesResolver =
     const checkStatusesQuery = `
     select users.username, offers.accepted from offers 
     join users on offers.recipient_id = users.id
-    where game_id = ${gameId}} and round_number = ${round}
+    where game_id = ${gameId} and round_number = ${round}
   `;
+
+    console.log('checkStatusesQuery', checkStatusesQuery);
 
     pool
       .query(checkStatusesQuery)
@@ -107,6 +109,8 @@ export const acceptOrRejectOfferResolver =
   set accepted = ${acceptOrReject === 'accept' ? 'true' : 'false'}
   where game_id = ${gameId} and round_number = ${round} and recipient_id = ${userId}
   `;
+
+    console.log('AOR query', query);
 
     pool
       .query(query)

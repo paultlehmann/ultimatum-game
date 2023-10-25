@@ -113,13 +113,16 @@ export const checkAcceptStatuses = (
     .then((usersWhoHaveAccepted: any) => {
       console.log('checkAcceptStatuses return', usersWhoHaveAccepted);
       setAcceptsIn(
-        usersWhoHaveAccepted.rows.map(
-          (user: { username: string; accepted?: boolean }) => {
-            if (!_.isUndefined(user.accepted)) {
-              return user.username;
-            }
-          }
-        )
+        usersWhoHaveAccepted.rows
+          .filter(
+            (user: { username: string; accepted?: boolean }) =>
+              !_.isNull(user.accepted)
+          )
+          .map((user: { username: string; accepted?: boolean }) => {
+            // if (!_.isNull(user.accepted)) {
+            return user.username;
+            // }
+          })
       );
     });
 };

@@ -40,6 +40,14 @@ const ManageGame = (props: IProps) => {
     [gameQueryResult]
   );
 
+  useEffect(() => {
+    console.log('participantNames UE outerhit');
+    if (checkedForGames && _.isEmpty(participantNames) && gameState.id) {
+      console.log('participantNames UE innerhit');
+      getParticipantsByGame(gameState.id, setParticipantNames);
+    }
+  }, [gameState.id, checkedForGames, JSON.stringify(participantNames)]);
+
   const stages: TGameStage[] = ['pre', 'offer', 'accept'];
 
   //  checkForGames(setGameQueryResult, { admin: userId, stages });
@@ -145,40 +153,44 @@ const ManageGame = (props: IProps) => {
               Waiting For:{' '}
               {_.pullAll(participantNames, acceptsIn).join(', ') || 'None'}
             </div>
-            {_.isEmpty(acceptsIn) ||
-            _.isEmpty(_.pullAll(participantNames, acceptsIn)) ? (
-              <ButtonWithRefresh
-                onClick={() =>
-                  checkAcceptStatuses(
-                    gameState.id,
-                    gameState.round,
-                    setAcceptsIn
-                  )
-                }
-                text={'Refresh'}
-              />
-            ) : (
-              <>
-                <div>All Offers Accepted/Rejected!</div>
-                <Button
+            {
+              // _.isEmpty(acceptsIn) ||
+              // _.isEmpty(_.pullAll(participantNames, acceptsIn))
+              !_.isEqual(participantNames, acceptsIn) ? (
+                <ButtonWithRefresh
                   onClick={() => {
-                    participantNames.forEach((participantName: string) =>
-                      shuffleAndAssignOffers(
-                        gameState.id,
-                        gameState.round,
-                        participantName
-                      )
+                    console.log('calling checkAcceptStatuses');
+                    checkAcceptStatuses(
+                      gameState.id,
+                      gameState.round,
+                      setAcceptsIn
                     );
-
-                    updateGame(gameState.id, 'accept');
-
-                    setGameState({ ...gameState, stage: 'accept' });
                   }}
-                >
-                  Start Accept/Reject Phase
-                </Button>
-              </>
-            )}
+                  text={'Refresh'}
+                />
+              ) : (
+                <>
+                  <div>All Offers Accepted/Rejected!</div>
+                  <Button
+                    onClick={() => {
+                      participantNames.forEach((participantName: string) =>
+                        shuffleAndAssignOffers(
+                          gameState.id,
+                          gameState.round,
+                          participantName
+                        )
+                      );
+
+                      updateGame(gameState.id, 'accept');
+
+                      setGameState({ ...gameState, stage: 'accept' });
+                    }}
+                  >
+                    Start Accept/Reject Phase
+                  </Button>
+                </>
+              )
+            }
           </>
         );
     }
@@ -208,7 +220,7 @@ const ManageGame = (props: IProps) => {
           variant={'contained'}
           style={{ margin: '10px 0px' }}
           onClick={() => {
-            getParticipantsByGame(id, setParticipantNames);
+            // getParticipantsByGame(id, setParticipantNames);
             setGameState({
               admin,
               id,

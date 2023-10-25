@@ -105,6 +105,8 @@ export const getParticipantsByGameResolver =
     join participant_ids on users.id = participant_ids.id
     `;
 
+    console.log('getParticipantNamesQuery', getParticipantNamesQuery);
+
     pool
       .query(getParticipantNamesQuery)
       .then((result: QueryResult) => res.status(200).send(result.rows));
