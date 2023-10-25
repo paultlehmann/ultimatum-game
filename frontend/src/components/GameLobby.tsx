@@ -45,8 +45,8 @@ const GameLobby = (props: IProps) => {
             <ButtonWithRefresh
               onClick={() =>
                 checkForGames(
-                  setGameQueryResult,
                   { participant: userId, stages: stagesToCheck },
+                  setGameQueryResult,
                   setGameState
                 )
               }
@@ -55,7 +55,7 @@ const GameLobby = (props: IProps) => {
           </>
         );
       case 'offer':
-        return <MakeOffer />;
+        return <MakeOffer setGameState={setGameState} userId={userId} />;
     }
   }
 
@@ -132,7 +132,7 @@ const GameLobby = (props: IProps) => {
       <ButtonWithRefresh
         onClick={() => {
           setCheckedForGames(true);
-          checkForGames(setGameQueryResult, { stages: stagesToCheck });
+          checkForGames({ stages: stagesToCheck }, setGameQueryResult);
         }}
         text={checkedForGames ? 'Check Again' : 'Check For Games'}
       />

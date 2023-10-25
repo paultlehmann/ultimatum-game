@@ -10,8 +10,8 @@ interface IGameQueryOptions {
 export const checkForGames =
   // (ev: MouseEvent<HTMLButtonElement>) =>
   (
-    setGameQueryResult: SetState<IGameRow | null>,
     options: IGameQueryOptions,
+    setGameQueryResult?: SetState<IGameRow | null>,
     setGameState?: SetState<IGameState>
   ) => {
     console.log('checkForGames hit');
@@ -34,7 +34,9 @@ export const checkForGames =
       .then((result: IGameRow[]) => {
         if (!_.isEmpty(result)) {
           console.log('checkForGames result', result);
-          setGameQueryResult(result[0]);
+          if (setGameQueryResult) {
+            setGameQueryResult(result[0]);
+          }
           if (setGameState) {
             setGameState((prevState: IGameState) => ({
               ...prevState,

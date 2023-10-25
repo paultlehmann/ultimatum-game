@@ -116,7 +116,7 @@ const ManageGame = (props: IProps) => {
       <ButtonWithRefresh
         onClick={() => {
           setCheckedForGames(true);
-          checkForGames(setGameQueryResult, { admin: userId, stages });
+          checkForGames({ admin: userId, stages }, setGameQueryResult);
         }}
         text={'Check For Games'}
       />
