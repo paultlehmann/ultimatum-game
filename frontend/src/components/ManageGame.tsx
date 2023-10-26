@@ -36,17 +36,24 @@ const ManageGame = (props: IProps) => {
   const [acceptsIn, setAcceptsIn] = useState<string[]>([]);
 
   useEffect(
+    () => console.log('new participantNames', participantNames),
+    [participantNames]
+  );
+
+  // const participantNames = gameState.participants
+
+  useEffect(
     () => console.log('new ManageGame gameQueryResult', gameQueryResult),
     [gameQueryResult]
   );
 
-  useEffect(() => {
-    console.log('participantNames UE outerhit');
-    if (checkedForGames && _.isEmpty(participantNames) && gameState.id) {
-      console.log('participantNames UE innerhit');
-      getParticipantsByGame(gameState.id, setParticipantNames);
-    }
-  }, [gameState.id, checkedForGames, JSON.stringify(participantNames)]);
+  // useEffect(() => {
+  //   console.log('participantNames UE outerhit');
+  //   if (checkedForGames && _.isEmpty(participantNames) && gameState.id) {
+  //     console.log('participantNames UE innerhit');
+  //     getParticipantsByGame(gameState.id, setParticipantNames);
+  //   }
+  // }, [gameState.id, checkedForGames, JSON.stringify(participantNames)]);
 
   const stages: TGameStage[] = ['pre', 'offer', 'accept'];
 
@@ -144,7 +151,7 @@ const ManageGame = (props: IProps) => {
         );
       case 'accept':
         console.log('pullall result', _.pullAll(participantNames, acceptsIn));
-        console.log('participantNames', participantNames);
+        // console.log('participantNames', participantNames);
         console.log('acceptsIn', acceptsIn);
         return (
           <>
@@ -220,7 +227,7 @@ const ManageGame = (props: IProps) => {
           variant={'contained'}
           style={{ margin: '10px 0px' }}
           onClick={() => {
-            // getParticipantsByGame(id, setParticipantNames);
+            getParticipantsByGame(id, setParticipantNames);
             setGameState({
               admin,
               id,

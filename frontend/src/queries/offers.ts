@@ -112,18 +112,43 @@ export const checkAcceptStatuses = (
     })
     .then((usersWhoHaveAccepted: any) => {
       console.log('checkAcceptStatuses return', usersWhoHaveAccepted);
-      setAcceptsIn(
-        usersWhoHaveAccepted.rows
-          .filter(
-            (user: { username: string; accepted?: boolean }) =>
-              !_.isNull(user.accepted)
-          )
-          .map((user: { username: string; accepted?: boolean }) => {
-            // if (!_.isNull(user.accepted)) {
-            return user.username;
-            // }
+      setAcceptsIn((existingAccepts: string[]) => {
+        console.log('existingAccepts', existingAccepts);
+        // return usersWhoHaveAccepted.rows &&
+        // [...existingAccepts, usersWhoHaveAccepted.rows]
+        // return existingAccepts.concat(usersWhoHaveAccepted.rows.map((user: { username: string; accepted?: boolean }) => user.username))
+        const existingAcceptsAsUserObjects = existingAccepts?.map(
+          (existingAccept: string) => ({
+            username: existingAccept,
+            accepted: true
           })
-      );
+        );
+        const mergedArray = _.uniqBy(
+          [...existingAcceptsAsUserObjects, ...usersWhoHaveAccepted.rows],
+          'username'
+        );
+        console.log('mergedArray', mergedArray);
+        return (
+          mergedArray
+            // .filter((user: { username: string; accepted?: boolean }, index: number) => [...existingAcceptsAsUserObjects, ...usersWhoHaveAccepted.rows].indexOf(user) === index)
+            .filter(
+              // (user: { username: string; accepted?: boolean }) => {
+              (user: { username: string; accepted?: boolean }) => {
+                console.log('filter hit', user);
+                return (
+                  !_.isNull(user.accepted) && !_.isUndefined(user.accepted)
+                );
+              }
+              // )?.map((user: { username: string; accepted?: boolean }) => {
+            )
+            ?.map((user: { username: string; accepted?: boolean }) => {
+              console.log('map hit', user);
+              // if (!_.isNull(user.accepted)) {
+              return user.username;
+              // }
+            })
+        );
+      });
     });
 };
 

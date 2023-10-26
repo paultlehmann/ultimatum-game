@@ -83,6 +83,7 @@ export const getParticipantsByGame = (
   gameId: number,
   setParticipantNames: SetState<string[]>
 ) => {
+  console.log('getParticipantsByGame hit');
   fetch('http://localhost:8008/get-participants-by-game', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -97,6 +98,10 @@ export const getParticipantsByGame = (
     })
     .then((result: { username: string }[]) => {
       console.log('getParticipantsByGame result', result);
+      console.log(
+        'setting participants to:',
+        result.map((result: { username: string }) => result.username)
+      );
       setParticipantNames(
         result.map((result: { username: string }) => result.username)
       );
