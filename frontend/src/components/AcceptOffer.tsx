@@ -31,16 +31,12 @@ const AcceptOffer = (props: IProps) => {
     getOffers(setOffer, gameState.id, gameState.round, undefined, userId);
     getOfferHistory(setOpponentHistory, userId, gameState.id, gameState.round);
   }, []);
-  // return <div>{`Offer: ${offer?.amount}`}</div>;
 
   const renderHistory = (opponentHistory: IOpponentHistory[]) => {
     return (
       <ul>
         {opponentHistory.map((historyItem: IOpponentHistory, index: number) => {
           const { accepted, amount, round_number } = historyItem;
-          // return
-          // <List>
-          //   <ListItem>
           return (
             <li key={`history-row-${index + 1}`}>
               {`Round ${round_number}: Was offered $${amount} and `}
@@ -68,12 +64,7 @@ const AcceptOffer = (props: IProps) => {
         <ButtonWithRefresh
           text={'Refresh'}
           onClick={() =>
-            checkForGames(
-              // { stages: ['accept'], participant: userId },
-              { id: gameState.id },
-              undefined,
-              setGameState
-            )
+            checkForGames({ id: gameState.id }, undefined, setGameState)
           }
         />
       </>
@@ -96,13 +87,7 @@ const AcceptOffer = (props: IProps) => {
           <div>
             {!_.isEmpty(opponentHistory)
               ? renderHistory(opponentHistory)
-              : // ? opponentHistory.map(
-                //     (historyItem: IOpponentHistory) =>
-                //       `Round ${historyItem.round_number}: ${
-                //         historyItem.accepted ? 'Accepted' : 'Rejected'
-                //       } an offer of $${historyItem.amount}`
-                //   )
-                'None Yet'}
+              : 'None Yet'}
           </div>
           <Grid
             container={true}

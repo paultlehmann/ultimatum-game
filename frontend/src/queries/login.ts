@@ -1,16 +1,10 @@
 import { IUser, SetState } from '../types';
 
-// interface ICreateUserReturn {
-//   id: number;
-//   isAdmin: boolean;
-// }
-
 export const createUser = (
   username: string,
   admin: boolean,
   setUser: SetState<IUser>
 ) => {
-  // console.log('createUser hit');
   fetch('http://localhost:8008/create-user', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -20,16 +14,9 @@ export const createUser = (
     })
   })
     .then(async (response: Response) => {
-      // console.log('response', response);
-      // console.log('response.text()', await response.text());
       return await response.json();
     })
     .then((createUserReturn: any) => {
-      // console.log(
-      //   'createUserReturn',
-      //   createUserReturn,
-      //   typeof createUserReturn
-      // );
       const { id, isAdmin } = createUserReturn;
 
       if (isAdmin) {

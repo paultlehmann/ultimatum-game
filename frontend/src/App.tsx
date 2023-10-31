@@ -1,7 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import './App.css';
 import LoginPage from './components/LoginPage';
-// import TopHeader from './components/TopHeader'
 import AppContainer from './components/AppContainer';
 import GameLobby from './components/GameLobby';
 import ManageGame from './components/ManageGame';
@@ -15,26 +14,14 @@ const App = () => {
   });
 
   const [gameState, setGameState] = useState<IGameState>({
-    // participants: [],
     admin: 0,
     id: 0,
-    // participantIds: [],
-    // participantNames: [],
     round: 0,
     stage: 'pre'
   });
 
-  useEffect(() => console.log('new user', user), [user]);
-
-  useEffect(() => console.log('new gameState', gameState), [gameState]);
-
   if (!user.userName) {
-    return (
-      <LoginPage
-        setUser={setUser}
-        // user={user}
-      />
-    );
+    return <LoginPage setUser={setUser} />;
   } else {
     return (
       <AppContainer

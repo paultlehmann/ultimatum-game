@@ -20,12 +20,6 @@ interface IProps {
   userName?: string;
 }
 
-// export interface IExtendedOffer extends IOffer {
-//     accepted: boolean;
-//     offerer: number;
-//     recipient: number;
-// }
-
 const dollarFormatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
   currency: 'USD'
@@ -42,11 +36,6 @@ const Standings = (props: IProps) => {
 
   const [results, setResults] = useState<IStandingsRow[]>([]);
 
-  useEffect(
-    () => console.log('new allOffers', results),
-    [JSON.stringify(results)]
-  );
-
   useEffect(() => getAllOffers(setResults, gameId), []);
 
   return !_.isEmpty(results) ? (
@@ -56,9 +45,6 @@ const Standings = (props: IProps) => {
         <Table>
           <TableHead>
             <TableRow>
-              {/* {results.map((result: IStandingsRow) => {
-            return<TableCell>{Object.keys(result).map((key: string) => <TableCell>{key}</TableCell>)}</TableCell>
-        })} */}
               <TableCell
                 style={{
                   textAlign: 'center',
@@ -135,10 +121,8 @@ const Standings = (props: IProps) => {
           </TableHead>
           <TableBody>
             {results.map((result: IStandingsRow, index: number) => {
-              // @ts-ignore
               return (
-                <TableRow>
-                  {/* {Object.keys(result).map((key: string) => <TableCell style={{textAlign: 'center'}}>{result[key]}</TableCell>)} */}
+                <TableRow key={`standings-row-${index + 1}`}>
                   <TableCell
                     style={{
                       textAlign: 'center',

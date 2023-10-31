@@ -1,11 +1,5 @@
-import { useEffect, useState } from 'react';
-import {
-  // Box,
-  Button,
-  Card,
-  CardContent,
-  Grid
-} from '@mui/material';
+import { useState } from 'react';
+import { Button, Card, CardContent, Grid } from '@mui/material';
 import _ from 'lodash';
 import ButtonWithRefresh from './ButtonWithRefresh';
 import {
@@ -34,33 +28,12 @@ const ManageGame = (props: IProps) => {
 
   const [checkedForGames, setCheckedForGames] = useState<boolean>(false);
   const [gameQueryResult, setGameQueryResult] = useState<IGameRow | null>(null);
-  // const [participantNames, setParticipantNames] = useState<string[]>([]);
   const [offersIn, setOffersIn] = useState<string[]>([]);
   const [acceptsIn, setAcceptsIn] = useState<string[]>([]);
 
-  // useEffect(
-  //   () => console.log('new participantNames', participantNames),
-  //   [participantNames]
-  // );
-
   const participantNames = gameState.participantNames || [];
 
-  useEffect(
-    () => console.log('new ManageGame gameQueryResult', gameQueryResult),
-    [gameQueryResult]
-  );
-
-  // useEffect(() => {
-  //   console.log('participantNames UE outerhit');
-  //   if (checkedForGames && _.isEmpty(participantNames) && gameState.id) {
-  //     console.log('participantNames UE innerhit');
-  //     getParticipantsByGame(gameState.id, setParticipantNames);
-  //   }
-  // }, [gameState.id, checkedForGames, JSON.stringify(participantNames)]);
-
   const stages: TGameStage[] = ['pre', 'offer', 'accept'];
-
-  //  checkForGames(setGameQueryResult, { admin: userId, stages });
 
   const getGameBoxContent = () => {
     switch (gameState.stage) {
@@ -116,54 +89,25 @@ const ManageGame = (props: IProps) => {
                 <Button
                   variant={'contained'}
                   onClick={() => {
-                    console.log('aaa', gameState.participantNames);
-                    // gameState.participantNames?.forEach(
-                    //   (participantName: string) =>
                     shuffleAndAssignOffers(
                       gameState.id,
                       gameState.round,
-                      // participantName,
                       participantNames,
                       setGameState
                     );
-                    // );
 
                     updateGame(gameState.id, 'accept');
 
                     setOffersIn([]);
-
-                    // setGameState((prevState: IGameState) => ({ ...prevState, stage: 'accept' }));
                   }}
                 >
                   Start Accept/Reject Phase
                 </Button>
-                {/* <ButtonWithRefresh
-                  text={'Start Accept/Reject Phase'}
-                  onClick={() => {
-                    participantNames.forEach((participantName: string) =>
-                      shuffleAndAssignOffers(
-                        gameState.id,
-                        gameState.round,
-                        participantName
-                      )
-                    );
-
-                    updateGame(gameState.id, 'accept');
-
-                    setGameState({ ...gameState, stage: 'accept' });
-                  }}
-                /> */}
               </>
             )}
           </>
         );
       case 'accept':
-        console.log(
-          'pullall result',
-          _.pullAll([...participantNames], [...acceptsIn])
-        );
-        // console.log('participantNames', participantNames);
-        console.log('acceptsIn', acceptsIn);
         return (
           <>
             <div>Has Accepted/Rejected: {acceptsIn.join(', ') || 'None'}</div>
@@ -174,12 +118,8 @@ const ManageGame = (props: IProps) => {
             </div>
             {_.pullAll([...participantNames], [...acceptsIn]).join(', ') ||
             'None' !== 'None' ? (
-              // _.isEmpty(acceptsIn) ||
-              // _.isEmpty(_.pullAll(participantNames, acceptsIn))
-              // !_.isEqual(participantNames, acceptsIn)
               <ButtonWithRefresh
                 onClick={() => {
-                  console.log('calling checkAcceptStatuses');
                   checkAcceptStatuses(
                     gameState.id,
                     gameState.round,
@@ -210,11 +150,6 @@ const ManageGame = (props: IProps) => {
                           gameState.round,
                           setGameState
                         );
-                        // setGameState({
-                        //   ...gameState,
-                        //   stage: 'offer',
-                        //   round: gameState.round + 1
-                        // });
                         setAcceptsIn([]);
                       }}
                     >
@@ -268,8 +203,6 @@ const ManageGame = (props: IProps) => {
   }
 
   if (gameQueryResult) {
-    console.log('secondhit');
-    console.log('gameQueryResult', gameQueryResult);
     const { admin, id, round, stage } = gameQueryResult;
     return (
       <>

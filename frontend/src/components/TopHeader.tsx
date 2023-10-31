@@ -13,7 +13,6 @@ const TopHeader = (props: IProps) => {
   const { gameId, round, setGameState, setUser, userName } = props;
 
   return (
-    // <div style={{display: 'flex', justifyContent: 'space-between'}}>
     <div
       style={{
         border: '1px solid black',
@@ -68,7 +67,6 @@ const TopHeader = (props: IProps) => {
         </Link>
       </div>
     </div>
-    // </div>
   );
 };
 

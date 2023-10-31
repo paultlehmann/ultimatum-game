@@ -1,9 +1,4 @@
-import {
-  ChangeEvent,
-  // FocusEvent,
-  // useEffect,
-  useState
-} from 'react';
+import { ChangeEvent, useState } from 'react';
 import {
   Button,
   Card,
@@ -13,10 +8,7 @@ import {
   TextField
 } from '@mui/material';
 import ButtonWithRefresh from './ButtonWithRefresh';
-import {
-  // getOffers,
-  saveOffer
-} from '../queries/offers';
+import { saveOffer } from '../queries/offers';
 import { checkForGames } from '../queries/games';
 import { IGameState, SetState } from '../types';
 
@@ -31,30 +23,13 @@ const MakeOffer = (props: IProps) => {
 
   const [offer, setOffer] = useState<number>(5);
   const [offerSubmitted, setOfferSubmitted] = useState<boolean>(false);
-  // const [ownShare, setOwnShare] = useState<number>(5);
-
-  // const [offerData, setOfferData] = useState<any>([]);
-
-  // useEffect(() => {
-  //   getOffers(setOfferData);
-  // }, []);
-
-  // useEffect(() => console.log('new offerData', offerData), [offerData]);
-
-  // const handleSubmitOfferClick = (ev: FocusEvent<HTMLInputElement>) => {
-  //   console.log(`setting offer to ${ev.target.value}`);
-  //   // setOffer(Number(ev.target.value));
-  // };
 
   if (!offerSubmitted) {
     return (
       <Card>
         <CardHeader title={'Make an Offer'} />
         <CardContent>
-          {/* <div>Offer:</div> */}
           <TextField
-            // autoFocus={true}
-            // defaultValue={5}
             value={offer || ''}
             placeholder={'0'}
             InputProps={{
@@ -76,26 +51,15 @@ const MakeOffer = (props: IProps) => {
                 fontSize: '20px',
                 color: 'red',
                 fontWeight: 'bold'
-                // marginLeft: '-5px'
-                // paddingRight: '6px'
               }
             }}
-            // onBlur={(ev: FocusEvent<HTMLInputElement>) =>
-            //   handleSubmitOfferClick(ev)
-            // }
             onChange={(ev: ChangeEvent<HTMLInputElement>) => {
               if (Number(ev.target.value) > 10) {
-                // ev.target.value = '10';
                 setOffer(10);
-                // setOwnShare(0)
               } else if (Number(ev.target.value) < 0) {
-                // ev.target.value = '0';
                 setOffer(0);
-                // setOwnShare(10)
               } else {
-                // ev.target.value = Math.round(Number(ev.target.value)).toString();
                 setOffer(Math.round(Number(ev.target.value)));
-                // setOwnShare(10-(Math.round(Number(ev.target.value))))
               }
             }}
             style={{
@@ -114,7 +78,6 @@ const MakeOffer = (props: IProps) => {
               saveOffer(offer, gameState.id, gameState.round, userId);
               setOfferSubmitted(true);
             }}
-            // style={{ marginTop: '5px' }}
             variant={'contained'}
           >
             Submit Offer
@@ -130,12 +93,7 @@ const MakeOffer = (props: IProps) => {
         <ButtonWithRefresh
           text={'Refresh'}
           onClick={() =>
-            checkForGames(
-              // { stages: ['accept'], participant: userId },
-              { id: gameState.id },
-              undefined,
-              setGameState
-            )
+            checkForGames({ id: gameState.id }, undefined, setGameState)
           }
         />
       </>

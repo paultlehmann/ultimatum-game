@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Button } from '@mui/material';
 import ButtonWithRefresh from './ButtonWithRefresh';
 import AcceptOffer from './AcceptOffer';
@@ -10,7 +10,6 @@ import Standings from './Standings';
 interface IProps {
   gameState: IGameState;
   setGameState: SetState<IGameState>;
-  // userId: number;
   user: IUser;
 }
 
@@ -22,24 +21,7 @@ const GameLobby = (props: IProps) => {
   const [checkedForGames, setCheckedForGames] = useState<boolean>(false);
   const [gameQueryResult, setGameQueryResult] = useState<IGameRow | null>(null);
 
-  useEffect(
-    () => console.log('new GameLobby gameQueryResult', gameQueryResult),
-    [gameQueryResult]
-  );
-
   const stagesToCheck: TGameStage[] = ['pre', 'offer', 'accept'];
-
-  // return (
-  //   <>
-  //     <h1>No games found!</h1>
-  //     <ButtonWithRefresh
-  //       onClick={() =>
-  //         checkForGames(setGameQueryResult, { participant: userId, stages: stagesToCheck })
-  //       }
-  //       text={'Check Again'}
-  //     />
-  //   </>
-  // );
 
   if (gameState.id) {
     switch (gameState.stage) {
@@ -90,8 +72,6 @@ const GameLobby = (props: IProps) => {
   }
 
   if (gameQueryResult) {
-    // console.log('secondhit');
-    console.log('gameQueryResult', gameQueryResult);
     const { admin, id, participants, round, stage } = gameQueryResult;
 
     if (participants.includes(userId)) {
@@ -131,7 +111,6 @@ const GameLobby = (props: IProps) => {
             variant={'contained'}
             style={{ margin: '10px 0px' }}
             onClick={() => {
-              console.log('addParticipantToGame onClick hit');
               addParticipantToGame(id, userId);
               setGameState({
                 admin,
@@ -155,9 +134,7 @@ const GameLobby = (props: IProps) => {
         </>
       );
     }
-  }
-  //  if (!checkedForGames)
-  else {
+  } else {
     return (
       <ButtonWithRefresh
         onClick={() => {

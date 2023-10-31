@@ -7,18 +7,6 @@ import {
   SetState
 } from '../types';
 
-// export const getOffers = (setOfferData: (newVal: any) => void) => {
-//   fetch('http://localhost:8008/get-offers')
-//     .then(async (response: Response) => {
-//       // console.log('response', response);
-//       // console.log('response.text()', await response.text());
-//       return response.text();
-//     })
-//     .then((data) => {
-//       setOfferData(data);
-//     });
-// };
-
 export const getOffers = (
   setOffer: SetState<IOffer | null>,
   gameId: number,
@@ -26,7 +14,6 @@ export const getOffers = (
   id?: number,
   recipient?: number
 ) => {
-  console.log('getOffers hit');
   fetch('http://localhost:8008/get-offers', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -38,8 +25,6 @@ export const getOffers = (
     })
   })
     .then(async (response: Response) => {
-      // console.log('response', response);
-      // console.log('response.text()', await response.text());
       return response.json();
     })
     .then((data: any) => {
@@ -48,7 +33,6 @@ export const getOffers = (
         id,
         amount
       });
-      // console.log('getOffers return', data);
     });
 };
 
@@ -84,12 +68,9 @@ export const checkOfferStatuses = (
     })
   })
     .then(async (response: Response) => {
-      // console.log('response', response);
-      // console.log('response.text()', await response.text());
       return response.json();
     })
     .then((usersWithOffersMade: any) => {
-      console.log('checkOfferStatuses return', usersWithOffersMade);
       setOffersIn(
         usersWithOffersMade.rows.map(
           (user: { username: string }) => user.username
@@ -112,17 +93,10 @@ export const checkAcceptStatuses = (
     })
   })
     .then(async (response: Response) => {
-      // console.log('response', response);
-      // console.log('response.text()', await response.text());
       return response.json();
     })
     .then((usersWhoHaveAccepted: any) => {
-      console.log('checkAcceptStatuses return', usersWhoHaveAccepted);
       setAcceptsIn((existingAccepts: string[]) => {
-        console.log('existingAccepts', existingAccepts);
-        // return usersWhoHaveAccepted.rows &&
-        // [...existingAccepts, usersWhoHaveAccepted.rows]
-        // return existingAccepts.concat(usersWhoHaveAccepted.rows.map((user: { username: string; accepted?: boolean }) => user.username))
         const existingAcceptsAsUserObjects = existingAccepts?.map(
           (existingAccept: string) => ({
             username: existingAccept,
@@ -133,27 +107,14 @@ export const checkAcceptStatuses = (
           [...existingAcceptsAsUserObjects, ...usersWhoHaveAccepted.rows],
           'username'
         );
-        console.log('mergedArray', mergedArray);
-        return (
-          mergedArray
-            // .filter((user: { username: string; accepted?: boolean }, index: number) => [...existingAcceptsAsUserObjects, ...usersWhoHaveAccepted.rows].indexOf(user) === index)
-            .filter(
-              // (user: { username: string; accepted?: boolean }) => {
-              (user: { username: string; accepted?: boolean }) => {
-                console.log('filter hit', user);
-                return (
-                  !_.isNull(user.accepted) && !_.isUndefined(user.accepted)
-                );
-              }
-              // )?.map((user: { username: string; accepted?: boolean }) => {
-            )
-            ?.map((user: { username: string; accepted?: boolean }) => {
-              console.log('map hit', user);
-              // if (!_.isNull(user.accepted)) {
-              return user.username;
-              // }
-            })
-        );
+
+        return mergedArray
+          .filter((user: { username: string; accepted?: boolean }) => {
+            return !_.isNull(user.accepted) && !_.isUndefined(user.accepted);
+          })
+          ?.map((user: { username: string; accepted?: boolean }) => {
+            return user.username;
+          });
       });
     });
 };
@@ -161,11 +122,9 @@ export const checkAcceptStatuses = (
 export const shuffleAndAssignOffers = (
   gameId: number,
   round: number,
-  // userName: string,
   participantNames: string[],
   setGameState: SetState<IGameState>
 ) => {
-  console.log('shuffleAndAssignOffers hit');
   fetch('http://localhost:8008/shuffle-and-assign-offers', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -175,17 +134,11 @@ export const shuffleAndAssignOffers = (
       participantNames
     })
   }).then(async () => {
-    // console.log('response', response);
-    // console.log('response.text()', await response.text());
-    // return response.text();
     setGameState((prevState: IGameState) => ({
       ...prevState,
       stage: 'accept'
     }));
   });
-  // .then((data: any) => {
-  //   console.log('shuffleAndAssignOffers data', data);
-  // });
 };
 
 export const acceptOrRejectOffer = (
@@ -203,15 +156,7 @@ export const acceptOrRejectOffer = (
       round,
       userId
     })
-  })
-    .then(async (response: Response) => {
-      // console.log('response', response);
-      // console.log('response.text()', await response.text());
-      return response.json();
-    })
-    .then((data: any) => {
-      console.log('acceptOrRejectOffer data', data);
-    });
+  });
 };
 
 export const getOfferHistory = (
@@ -230,12 +175,9 @@ export const getOfferHistory = (
     })
   })
     .then(async (response: Response) => {
-      // console.log('response', response);
-      // console.log('response.text()', await response.text());
       return response.json();
     })
     .then((data: any) => {
-      console.log('getOfferHistory data', data);
       setOpponentHistory(data.rows);
     });
 };
@@ -252,12 +194,9 @@ export const getAllOffers = (
     })
   })
     .then(async (response: Response) => {
-      // console.log('response', response);
-      // console.log('response.text()', await response.text());
       return response.json();
     })
     .then((data: IStandingsRow[]) => {
-      console.log('getAllOffers data', data);
       setResults(_.orderBy(data, ['winnings'], ['desc']));
     });
 };

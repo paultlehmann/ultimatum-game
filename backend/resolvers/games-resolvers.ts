@@ -15,21 +15,15 @@ interface IGameQueryOptions {
 interface IAdjustedValues extends Record<number, string> {
   admin?: number;
   id?: number;
-  // participants?: string;
-  // stage?: `'${TGameStage}'`;
   stage?: string;
 }
 
 export const checkForGamesResolver = () => (req: Request, res: Response) => {
-  // console.log('resolver hit');
   const { admin, id, participant, stages }: IGameQueryOptions = req.body;
-
-  console.log('checkForGamesResolver args', req.body);
 
   const adjustedValues: IAdjustedValues = {};
 
   if (admin) {
-    // adjustedValues.admin = `(select id from users where username = '${admin}')`;
     adjustedValues.admin = admin;
   }
 
@@ -47,16 +41,6 @@ export const checkForGamesResolver = () => (req: Request, res: Response) => {
       .join(',')})`;
   }
 
-  // const adjustedValues: IAdjustedValues = !_.isUndefined(participant) ? {
-  //   admin,
-  //   // participants: `'{${participants?.join(',')}}'`,
-  //   [participant]: 'ANY(participants)',
-  //   stage: stage && `'${stage}'`
-  // } : {
-  //   admin,
-  //   stage: stage && `'${stage}'`
-  // };
-
   const wheres = Object.keys(adjustedValues)
     .map(
       (key: string, index: number) =>
@@ -69,16 +53,9 @@ export const checkForGamesResolver = () => (req: Request, res: Response) => {
 
   const checkForGamesQuery = `SELECT * FROM games ${wheres} order by id desc`;
 
-  console.log('checkForGamesQuery', checkForGamesQuery);
-
-  // const checkForGames = async () => {
   pool.query(checkForGamesQuery).then((result: QueryResult) => {
-    // console.log('checkForGames result', result);
     return res.status(200).send(result.rows);
   });
-  // };
-
-  // return checkForGames();
 };
 
 export const createGameResolver = () => (req: Request, res: Response) => {
@@ -104,8 +81,6 @@ export const getParticipantsByGameResolver =
     select username from users
     join participant_ids on users.id = participant_ids.id
     `;
-
-    console.log('getParticipantNamesQuery', getParticipantNamesQuery);
 
     pool
       .query(getParticipantNamesQuery)
@@ -136,8 +111,6 @@ export const addParticipantToGameResolver =
   set participants = array_append(participants, ${userId})
   where id = ${gameId}
   `;
-
-    console.log('addParticipantQuery', addParticipantQuery);
 
     pool
       .query(addParticipantQuery)

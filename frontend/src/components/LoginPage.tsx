@@ -1,22 +1,14 @@
-import {
-  ChangeEvent,
-  // useEffect,
-  useState
-} from 'react';
+import { ChangeEvent, useState } from 'react';
 import { Button, TextField } from '@mui/material';
 import { createUser } from '../queries/login';
 import { IUser, SetState } from '../types';
 
 interface IProps {
   setUser: SetState<IUser>;
-  // user: IUser;
 }
 
 const LoginPage = (props: IProps) => {
-  const {
-    setUser
-    // user
-  } = props;
+  const { setUser } = props;
 
   const [loginClicked, setLoginClicked] = useState<boolean>(false);
   const [userNameFieldValue, setUserNameFieldValue] = useState<string>('');
@@ -24,14 +16,11 @@ const LoginPage = (props: IProps) => {
   const errorState = loginClicked && !userNameFieldValue;
 
   const handleLoginClick = () => {
-    // setUser({ ...user, userName: userNameFieldValue });
     setLoginClicked(true);
     if (!errorState) {
       createUser(userNameFieldValue, false, setUser);
     }
   };
-
-  //   useEffect(() => console.log('new state',{loginClicked,userNameFieldValue}), [loginClicked, userNameFieldValue])
 
   return (
     <>
