@@ -4,17 +4,21 @@ import { IGameState, IUser, SetState } from '../types';
 
 interface IProps {
   children: ReactNode;
+  gameId: number;
+  round: number;
   setGameState: SetState<IGameState>;
   setUser: SetState<IUser>;
   userName: string;
 }
 
 const AppContainer = (props: IProps) => {
-  const { children, setGameState, setUser, userName } = props;
+  const { children, gameId, round, setGameState, setUser, userName } = props;
 
   return (
     <>
       <TopHeader
+        gameId={gameId}
+        round={round}
         setGameState={setGameState}
         setUser={setUser}
         userName={userName}

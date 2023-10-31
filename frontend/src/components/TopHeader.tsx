@@ -2,25 +2,44 @@ import { Link } from '@mui/material';
 import { IGameState, IUser, SetState } from '../types';
 
 interface IProps {
+  gameId: number;
+  round: number;
   setGameState: SetState<IGameState>;
   setUser: SetState<IUser>;
   userName: string;
 }
 
 const TopHeader = (props: IProps) => {
-  const { setGameState, setUser, userName } = props;
+  const { gameId, round, setGameState, setUser, userName } = props;
 
   return (
-    <>
+    // <div style={{display: 'flex', justifyContent: 'space-between'}}>
+    <div
+      style={{
+        border: '1px solid black',
+        margin: '5px',
+        height: '10vh',
+        position: 'sticky',
+        top: 0,
+        display: 'flex',
+        justifyContent: 'space-between'
+      }}
+    >
+      <div style={{ margin: '5px', textAlign: 'left', width: '33%' }}>
+        <div>Game ID: {gameId}</div>
+        <div>Round: {round}</div>
+      </div>
       <div
         style={{
-          border: '1px solid red',
-          height: '10vh',
-          position: 'sticky',
-          textAlign: 'right',
-          top: 0
+          textAlign: 'center',
+          fontSize: 20,
+          fontWeight: 'bold',
+          width: '33%'
         }}
       >
+        Ultimatum Game
+      </div>
+      <div style={{ margin: '5px', textAlign: 'right', width: '33%' }}>
         {`Logged in as ${userName}`}
         <br />
         <Link
@@ -43,7 +62,8 @@ const TopHeader = (props: IProps) => {
           Logout
         </Link>
       </div>
-    </>
+    </div>
+    // </div>
   );
 };
 

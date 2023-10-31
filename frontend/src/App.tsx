@@ -38,6 +38,8 @@ const App = () => {
   } else {
     return (
       <AppContainer
+        gameId={gameState.id}
+        round={gameState.round}
         setGameState={setGameState}
         setUser={setUser}
         userName={user.userName}
