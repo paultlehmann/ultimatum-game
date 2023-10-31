@@ -81,7 +81,7 @@ export const shuffleAndAssignOffersResolver =
   where game_id = ${gameId} and round_number = ${round} and offerer_id = (select id from users where username = '${userName}')
   `;
 
-    pool.query(query).then((result: QueryResult) => res.status(200));
+    pool.query(query).then((result: QueryResult) => res.status(200).send());
 
     console.log('shuffleAndAssignOffersResolver query', query);
   };

@@ -3,11 +3,13 @@ import {
   // Box,
   Button,
   Card,
-  CardContent
+  CardContent,
+  Grid
 } from '@mui/material';
 import _ from 'lodash';
 import ButtonWithRefresh from './ButtonWithRefresh';
 import {
+  advanceRound,
   checkForGames,
   createGame,
   getParticipantsByGame,
@@ -31,16 +33,16 @@ const ManageGame = (props: IProps) => {
 
   const [checkedForGames, setCheckedForGames] = useState<boolean>(false);
   const [gameQueryResult, setGameQueryResult] = useState<IGameRow | null>(null);
-  const [participantNames, setParticipantNames] = useState<string[]>([]);
+  // const [participantNames, setParticipantNames] = useState<string[]>([]);
   const [offersIn, setOffersIn] = useState<string[]>([]);
   const [acceptsIn, setAcceptsIn] = useState<string[]>([]);
 
-  useEffect(
-    () => console.log('new participantNames', participantNames),
-    [participantNames]
-  );
+  // useEffect(
+  //   () => console.log('new participantNames', participantNames),
+  //   [participantNames]
+  // );
 
-  // const participantNames = gameState.participants
+  const participantNames = gameState.participantNames || [];
 
   useEffect(
     () => console.log('new ManageGame gameQueryResult', gameQueryResult),
@@ -69,9 +71,7 @@ const ManageGame = (props: IProps) => {
               {participantNames.join(', ') || 'None'}
             </div>
             <ButtonWithRefresh
-              onClick={() =>
-                getParticipantsByGame(gameState.id, setParticipantNames)
-              }
+              onClick={() => getParticipantsByGame(gameState.id, setGameState)}
               size={'medium'}
               text={'Refresh Player List'}
             />
@@ -98,10 +98,11 @@ const ManageGame = (props: IProps) => {
             <div>Offers In: {offersIn.join(', ') || 'None'}</div>
             <div>
               Waiting For:{' '}
-              {_.pullAll(participantNames, offersIn).join(', ') || 'None'}
+              {_.pullAll([...participantNames], [...offersIn]).join(', ') ||
+                'None'}
             </div>
-            {_.isEmpty(offersIn) ||
-            _.isEmpty(_.pullAll(participantNames, offersIn)) ? (
+            {_.pullAll([...participantNames], [...offersIn]).join(', ') ||
+            'None' !== 'None' ? (
               <ButtonWithRefresh
                 onClick={() =>
                   checkOfferStatuses(gameState.id, gameState.round, setOffersIn)
@@ -114,17 +115,20 @@ const ManageGame = (props: IProps) => {
                 <Button
                   variant={'contained'}
                   onClick={() => {
-                    participantNames.forEach((participantName: string) =>
-                      shuffleAndAssignOffers(
-                        gameState.id,
-                        gameState.round,
-                        participantName
-                      )
+                    console.log('aaa', gameState.participantNames);
+                    gameState.participantNames?.forEach(
+                      (participantName: string) =>
+                        shuffleAndAssignOffers(
+                          gameState.id,
+                          gameState.round,
+                          participantName,
+                          setGameState
+                        )
                     );
 
                     updateGame(gameState.id, 'accept');
 
-                    setGameState({ ...gameState, stage: 'accept' });
+                    // setGameState((prevState: IGameState) => ({ ...prevState, stage: 'accept' }));
                   }}
                 >
                   Start Accept/Reject Phase
@@ -150,7 +154,10 @@ const ManageGame = (props: IProps) => {
           </>
         );
       case 'accept':
-        console.log('pullall result', _.pullAll(participantNames, acceptsIn));
+        console.log(
+          'pullall result',
+          _.pullAll([...participantNames], [...acceptsIn])
+        );
         // console.log('participantNames', participantNames);
         console.log('acceptsIn', acceptsIn);
         return (
@@ -158,46 +165,73 @@ const ManageGame = (props: IProps) => {
             <div>Has Accepted/Rejected: {acceptsIn.join(', ') || 'None'}</div>
             <div>
               Waiting For:{' '}
-              {_.pullAll(participantNames, acceptsIn).join(', ') || 'None'}
+              {_.pullAll([...participantNames], [...acceptsIn]).join(', ') ||
+                'None'}
             </div>
-            {
+            {_.pullAll([...participantNames], [...acceptsIn]).join(', ') ||
+            'None' !== 'None' ? (
               // _.isEmpty(acceptsIn) ||
               // _.isEmpty(_.pullAll(participantNames, acceptsIn))
-              !_.isEqual(participantNames, acceptsIn) ? (
-                <ButtonWithRefresh
-                  onClick={() => {
-                    console.log('calling checkAcceptStatuses');
-                    checkAcceptStatuses(
-                      gameState.id,
-                      gameState.round,
-                      setAcceptsIn
-                    );
+              // !_.isEqual(participantNames, acceptsIn)
+              <ButtonWithRefresh
+                onClick={() => {
+                  console.log('calling checkAcceptStatuses');
+                  checkAcceptStatuses(
+                    gameState.id,
+                    gameState.round,
+                    setAcceptsIn
+                  );
+                }}
+                text={'Refresh'}
+              />
+            ) : (
+              <>
+                <div>All Offers Accepted/Rejected!</div>
+                <Grid
+                  container={true}
+                  direction={'row'}
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'space-around',
+                    marginTop: '5px'
                   }}
-                  text={'Refresh'}
-                />
-              ) : (
-                <>
-                  <div>All Offers Accepted/Rejected!</div>
-                  <Button
-                    onClick={() => {
-                      participantNames.forEach((participantName: string) =>
-                        shuffleAndAssignOffers(
-                          gameState.id,
-                          gameState.round,
-                          participantName
-                        )
-                      );
-
-                      updateGame(gameState.id, 'accept');
-
-                      setGameState({ ...gameState, stage: 'accept' });
-                    }}
-                  >
-                    Start Accept/Reject Phase
-                  </Button>
-                </>
-              )
-            }
+                >
+                  <Grid item={true}>
+                    <Button
+                      variant={'contained'}
+                      color={'success'}
+                      onClick={() => {
+                        advanceRound(gameState.id, gameState.round);
+                        setGameState({
+                          ...gameState,
+                          stage: 'offer',
+                          round: gameState.round + 1
+                        });
+                      }}
+                    >
+                      Next Round
+                    </Button>
+                  </Grid>
+                  <Grid item={true}>
+                    <Button
+                      variant={'contained'}
+                      color={'error'}
+                      // onClick={() => {
+                      //   acceptOrRejectOffer(
+                      //     userId,
+                      //     gameState.id,
+                      //     gameState.round,
+                      //     'reject'
+                      //   );
+                      //   setHasAcceptedOrRejected('rejected');
+                      // }}
+                    >
+                      End Game
+                    </Button>
+                  </Grid>
+                </Grid>
+              </>
+            )}
           </>
         );
     }
@@ -227,8 +261,9 @@ const ManageGame = (props: IProps) => {
           variant={'contained'}
           style={{ margin: '10px 0px' }}
           onClick={() => {
-            getParticipantsByGame(id, setParticipantNames);
+            getParticipantsByGame(id, setGameState);
             setGameState({
+              ...gameState,
               admin,
               id,
               round,
@@ -238,7 +273,15 @@ const ManageGame = (props: IProps) => {
         >
           Yes
         </Button>
-        <Button variant={'contained'}>No</Button>
+        <Button
+          variant={'contained'}
+          onClick={() => {
+            updateGame(id, 'post');
+            setGameQueryResult(null);
+          }}
+        >
+          No (ends game without winner)
+        </Button>
       </>
     );
   } else if (!checkedForGames) {
@@ -262,7 +305,9 @@ const ManageGame = (props: IProps) => {
         >
           Yes
         </Button>
-        <Button variant={'contained'}>No</Button>
+        <Button variant={'contained'} onClick={() => setCheckedForGames(false)}>
+          No
+        </Button>
       </>
     );
   }

@@ -143,3 +143,16 @@ export const addParticipantToGameResolver =
       .query(addParticipantQuery)
       .then((result: QueryResult) => res.status(200).send());
   };
+
+export const advanceRoundResolver = () => (req: Request, res: Response) => {
+  const { gameId, currentRound } = req.body;
+
+  const updateRoundQuery = `
+    update games
+    set stage = 'offer', round = ${currentRound + 1}
+    where id = ${gameId}
+    `;
+  pool
+    .query(updateRoundQuery)
+    .then((result: QueryResult) => res.status(200).send());
+};

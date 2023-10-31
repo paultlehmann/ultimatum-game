@@ -18,6 +18,8 @@ const App = () => {
     // participants: [],
     admin: 0,
     id: 0,
+    // participantIds: [],
+    // participantNames: [],
     round: 0,
     stage: 'pre'
   });

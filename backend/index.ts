@@ -7,6 +7,7 @@ import {
 // import { IOffer } from './types';
 import {
   addParticipantToGameResolver,
+  advanceRoundResolver,
   checkForGamesResolver,
   createGameResolver,
   getParticipantsByGameResolver,
@@ -68,6 +69,8 @@ app.post('/check-accept-statuses', checkAcceptStatusesResolver());
 app.post('/shuffle-and-assign-offers', shuffleAndAssignOffersResolver());
 
 app.post('/accept-or-reject-offer', acceptOrRejectOfferResolver());
+
+app.post('/advance-round', advanceRoundResolver());
 
 // app.get('/get-offers', (req: Request, res: Response) => {
 //   //   console.log('resolver hit');

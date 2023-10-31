@@ -73,6 +73,7 @@ export const createGame = (
       setGameState({
         admin,
         id: result.id,
+        // participantIds: [],
         round: 1,
         stage: 'pre'
       });
@@ -81,7 +82,8 @@ export const createGame = (
 
 export const getParticipantsByGame = (
   gameId: number,
-  setParticipantNames: SetState<string[]>
+  // setParticipantNames: SetState<string[]>
+  setGameState: SetState<IGameState>
 ) => {
   console.log('getParticipantsByGame hit');
   fetch('http://localhost:8008/get-participants-by-game', {
@@ -98,13 +100,19 @@ export const getParticipantsByGame = (
     })
     .then((result: { username: string }[]) => {
       console.log('getParticipantsByGame result', result);
-      console.log(
-        'setting participants to:',
-        result.map((result: { username: string }) => result.username)
+      const participantNames = result.map(
+        (result: { username: string }) => result.username
       );
-      setParticipantNames(
-        result.map((result: { username: string }) => result.username)
-      );
+      console.log('setting participants to:', participantNames);
+      // setParticipantNames(
+      //   result.map((result: { username: string }) => result.username)
+      // );
+      if (!_.isEmpty(participantNames)) {
+        setGameState((prevState: IGameState) => ({
+          ...prevState,
+          participantNames
+        }));
+      }
     });
 };
 
@@ -135,6 +143,17 @@ export const addParticipantToGame = (gameId: number, userId: number) => {
     body: JSON.stringify({
       gameId,
       userId
+    })
+  });
+};
+
+export const advanceRound = (gameId: number, currentRound: number) => {
+  fetch('http://localhost:8008/advance-round', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      gameId,
+      currentRound
     })
   });
 };

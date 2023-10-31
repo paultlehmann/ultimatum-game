@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { IOffer, SetState } from '../types';
+import { IGameState, IOffer, SetState } from '../types';
 
 // export const getOffers = (setOfferData: (newVal: any) => void) => {
 //   fetch('http://localhost:8008/get-offers')
@@ -155,8 +155,10 @@ export const checkAcceptStatuses = (
 export const shuffleAndAssignOffers = (
   gameId: number,
   round: number,
-  userName: string
+  userName: string,
+  setGameState: SetState<IGameState>
 ) => {
+  console.log('shuffleAndAssignOffers hit');
   fetch('http://localhost:8008/shuffle-and-assign-offers', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -165,15 +167,18 @@ export const shuffleAndAssignOffers = (
       round,
       userName
     })
-  })
-    .then(async (response: Response) => {
-      // console.log('response', response);
-      // console.log('response.text()', await response.text());
-      return response.json();
-    })
-    .then((data: any) => {
-      console.log('shuffleAndAssignOffers data', data);
-    });
+  }).then(async () => {
+    // console.log('response', response);
+    // console.log('response.text()', await response.text());
+    // return response.text();
+    setGameState((prevState: IGameState) => ({
+      ...prevState,
+      stage: 'accept'
+    }));
+  });
+  // .then((data: any) => {
+  //   console.log('shuffleAndAssignOffers data', data);
+  // });
 };
 
 export const acceptOrRejectOffer = (
