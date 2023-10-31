@@ -8,12 +8,15 @@ interface IGameQueryOptions {
   stages?: TGameStage[];
 }
 
+const dbHost = import.meta.env.VITE_REACT_APP_DB_HOST;
+const backendPort = import.meta.env.VITE_REACT_APP_BACKEND_PORT;
+
 export const checkForGames = (
   options: IGameQueryOptions,
   setGameQueryResult?: SetState<IGameRow | null>,
   setGameState?: SetState<IGameState>
 ) => {
-  fetch('http://localhost:8008/check-for-games', {
+  fetch(`http://${dbHost}:${backendPort}/check-for-games`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(options)
@@ -42,7 +45,7 @@ export const createGame = (
   participants: number[],
   setGameState: SetState<IGameState>
 ) => {
-  fetch('http://localhost:8008/create-game', {
+  fetch(`http://${dbHost}:${backendPort}/create-game`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -67,7 +70,7 @@ export const getParticipantsByGame = (
   gameId: number,
   setGameState: SetState<IGameState>
 ) => {
-  fetch('http://localhost:8008/get-participants-by-game', {
+  fetch(`http://${dbHost}:${backendPort}/get-participants-by-game`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -92,7 +95,7 @@ export const getParticipantsByGame = (
 };
 
 export const updateGame = (gameId: number, newStage: TGameStage) => {
-  fetch('http://localhost:8008/update-game', {
+  fetch(`http://${dbHost}:${backendPort}/update-game`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -103,7 +106,7 @@ export const updateGame = (gameId: number, newStage: TGameStage) => {
 };
 
 export const addParticipantToGame = (gameId: number, userId: number) => {
-  fetch('http://localhost:8008/add-participant-to-game', {
+  fetch(`http://${dbHost}:${backendPort}/add-participant-to-game`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -118,7 +121,7 @@ export const advanceRound = (
   currentRound: number,
   setGameState: SetState<IGameState>
 ) => {
-  fetch('http://localhost:8008/advance-round', {
+  fetch(`http://${dbHost}:${backendPort}/advance-round`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({

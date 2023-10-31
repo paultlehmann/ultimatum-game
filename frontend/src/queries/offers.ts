@@ -7,6 +7,9 @@ import {
   SetState
 } from '../types';
 
+const dbHost = import.meta.env.VITE_REACT_APP_DB_HOST;
+const backendPort = import.meta.env.VITE_REACT_APP_BACKEND_PORT;
+
 export const getOffers = (
   setOffer: SetState<IOffer | null>,
   gameId: number,
@@ -14,7 +17,7 @@ export const getOffers = (
   id?: number,
   recipient?: number
 ) => {
-  fetch('http://localhost:8008/get-offers', {
+  fetch(`http://${dbHost}:${backendPort}/get-offers`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -42,7 +45,7 @@ export const saveOffer = (
   round: number,
   userId: number
 ) => {
-  fetch('http://localhost:8008/save-offer', {
+  fetch(`http://${dbHost}:${backendPort}/save-offer`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -59,7 +62,7 @@ export const checkOfferStatuses = (
   round: number,
   setOffersIn: SetState<string[]>
 ) => {
-  fetch('http://localhost:8008/check-offer-statuses', {
+  fetch(`http://${dbHost}:${backendPort}/check-offer-statuses`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -84,7 +87,7 @@ export const checkAcceptStatuses = (
   round: number,
   setAcceptsIn: SetState<string[]>
 ) => {
-  fetch('http://localhost:8008/check-accept-statuses', {
+  fetch(`http://${dbHost}:${backendPort}/check-accept-statuses`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -125,7 +128,7 @@ export const shuffleAndAssignOffers = (
   participantNames: string[],
   setGameState: SetState<IGameState>
 ) => {
-  fetch('http://localhost:8008/shuffle-and-assign-offers', {
+  fetch(`http://${dbHost}:${backendPort}/shuffle-and-assign-offers`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -147,7 +150,7 @@ export const acceptOrRejectOffer = (
   round: number,
   acceptOrReject: 'accept' | 'reject'
 ) => {
-  fetch('http://localhost:8008/accept-or-reject-offer', {
+  fetch(`http://${dbHost}:${backendPort}/accept-or-reject-offer`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -165,7 +168,7 @@ export const getOfferHistory = (
   gameId: number,
   round: number
 ) => {
-  fetch('http://localhost:8008/get-offer-history', {
+  fetch(`http://${dbHost}:${backendPort}/get-offer-history`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -186,7 +189,7 @@ export const getAllOffers = (
   setResults: SetState<IStandingsRow[]>,
   gameId: number
 ) => {
-  fetch('http://localhost:8008/get-all-offers', {
+  fetch(`http://${dbHost}:${backendPort}/get-all-offers`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({

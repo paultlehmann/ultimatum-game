@@ -1,5 +1,6 @@
 import express, { Express, NextFunction, Request, Response } from 'express';
 import { Pool } from 'pg';
+import 'dotenv/config';
 import {
   addParticipantToGameResolver,
   advanceRoundResolver,
@@ -21,15 +22,14 @@ import {
 } from './resolvers/offers-resolvers';
 
 const app: Express = express();
-const backendPort = 8008;
-const dbPort = 5432;
+const backendPort = process.env.VITE_REACT_APP_BACKEND_PORT;
 
 export const pool = new Pool({
-  user: 'postgres',
-  host: 'localhost',
-  database: 'postgres',
-  password: 'postgres',
-  port: dbPort
+  user: process.env.VITE_REACT_APP_DB_USER,
+  host: process.env.VITE_REACT_APP_DB_HOST,
+  database: process.env.VITE_REACT_APP_DB_NAME,
+  password: process.env.VITE_REACT_APP_DB_PASSWORD,
+  port: Number(process.env.VITE_REACT_APP_DB_PORT)
 });
 
 app.use(express.json());
@@ -74,5 +74,7 @@ app.post('/get-offer-history', getOfferHistoryResolver());
 app.post('/get-all-offers', getAllOffersResolver());
 
 app.listen(backendPort, () => {
-  console.log(`Server is running at http://localhost:${backendPort}`);
+  console.log(
+    `Server is running at http://${process.env.VITE_REACT_APP_DB_HOST}:${backendPort}`
+  );
 });

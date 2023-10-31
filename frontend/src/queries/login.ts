@@ -5,14 +5,19 @@ export const createUser = (
   admin: boolean,
   setUser: SetState<IUser>
 ) => {
-  fetch('http://localhost:8008/create-user', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      admin,
-      username
-    })
-  })
+  fetch(
+    `http://${import.meta.env.VITE_REACT_APP_DB_HOST}:${
+      import.meta.env.VITE_REACT_APP_BACKEND_PORT
+    }/create-user`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        admin,
+        username
+      })
+    }
+  )
     .then(async (response: Response) => {
       return await response.json();
     })
