@@ -27,3 +27,9 @@ export interface IOffer {
   amount: number;
   id: number;
 }
+
+export interface IOpponentHistory {
+  accepted: boolean;
+  amount: number;
+  round_number: number;
+}

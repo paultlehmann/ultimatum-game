@@ -2,20 +2,18 @@ import { useEffect, useState } from 'react';
 import { Button, Card, CardContent, CardHeader, Grid } from '@mui/material';
 import _ from 'lodash';
 import ButtonWithRefresh from './ButtonWithRefresh';
-import { acceptOrRejectOffer, getOffers } from '../queries/offers';
+import {
+  acceptOrRejectOffer,
+  getOfferHistory,
+  getOffers
+} from '../queries/offers';
 import { checkForGames } from '../queries/games';
-import { IGameState, IOffer, SetState } from '../types';
+import { IGameState, IOffer, IOpponentHistory, SetState } from '../types';
 
 interface IProps {
   gameState: IGameState;
   setGameState: SetState<IGameState>;
   userId: number;
-}
-
-interface IOpponentHistory {
-  accepted: boolean;
-  amount: number;
-  round: number;
 }
 
 const AcceptOffer = (props: IProps) => {
@@ -29,11 +27,38 @@ const AcceptOffer = (props: IProps) => {
     'accepted' | 'rejected' | null
   >(null);
 
-  useEffect(
-    () => getOffers(setOffer, gameState.id, gameState.round, undefined, userId),
-    []
-  );
+  useEffect(() => {
+    getOffers(setOffer, gameState.id, gameState.round, undefined, userId);
+    getOfferHistory(setOpponentHistory, userId, gameState.id, gameState.round);
+  }, []);
   // return <div>{`Offer: ${offer?.amount}`}</div>;
+
+  const renderHistory = (opponentHistory: IOpponentHistory[]) => {
+    return (
+      <ul>
+        {opponentHistory.map((historyItem: IOpponentHistory) => {
+          const { accepted, amount, round_number } = historyItem;
+          // return
+          // <List>
+          //   <ListItem>
+          return (
+            <li>
+              {`Round ${round_number}: Was offered $${amount} and `}
+              {accepted ? (
+                <span style={{ fontWeight: 'bold', color: 'green' }}>
+                  accepted
+                </span>
+              ) : (
+                <span style={{ fontWeight: 'bold', color: 'red' }}>
+                  rejected
+                </span>
+              )}
+            </li>
+          );
+        })}
+      </ul>
+    );
+  };
 
   if (hasAcceptedOrRejected) {
     return (
@@ -70,13 +95,14 @@ const AcceptOffer = (props: IProps) => {
           <div>by a player with the following history:</div>
           <div>
             {!_.isEmpty(opponentHistory)
-              ? opponentHistory.map(
-                  (historyItem: IOpponentHistory) =>
-                    `Round ${historyItem.round}: ${
-                      historyItem.accepted ? 'Accepted' : 'Rejected'
-                    } an offer of $${historyItem.amount}`
-                )
-              : 'None Yet'}
+              ? renderHistory(opponentHistory)
+              : // ? opponentHistory.map(
+                //     (historyItem: IOpponentHistory) =>
+                //       `Round ${historyItem.round_number}: ${
+                //         historyItem.accepted ? 'Accepted' : 'Rejected'
+                //       } an offer of $${historyItem.amount}`
+                //   )
+                'None Yet'}
           </div>
           <Grid
             container={true}

@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { IGameState, IOffer, SetState } from '../types';
+import { IGameState, IOffer, IOpponentHistory, SetState } from '../types';
 
 // export const getOffers = (setOfferData: (newVal: any) => void) => {
 //   fetch('http://localhost:8008/get-offers')
@@ -205,5 +205,31 @@ export const acceptOrRejectOffer = (
     })
     .then((data: any) => {
       console.log('acceptOrRejectOffer data', data);
+    });
+};
+
+export const getOfferHistory = (
+  setOpponentHistory: SetState<IOpponentHistory[]>,
+  userId: number,
+  gameId: number,
+  round: number
+) => {
+  fetch('http://localhost:8008/get-offer-history', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      gameId,
+      round,
+      userId
+    })
+  })
+    .then(async (response: Response) => {
+      // console.log('response', response);
+      // console.log('response.text()', await response.text());
+      return response.json();
+    })
+    .then((data: any) => {
+      console.log('getOfferHistory data', data);
+      setOpponentHistory(data.rows);
     });
 };

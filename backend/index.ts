@@ -18,6 +18,7 @@ import {
   acceptOrRejectOfferResolver,
   checkAcceptStatusesResolver,
   checkOfferStatusesResolver,
+  getOfferHistoryResolver,
   getOffersResolver,
   saveOfferResolver,
   shuffleAndAssignOffersResolver
@@ -71,6 +72,8 @@ app.post('/shuffle-and-assign-offers', shuffleAndAssignOffersResolver());
 app.post('/accept-or-reject-offer', acceptOrRejectOfferResolver());
 
 app.post('/advance-round', advanceRoundResolver());
+
+app.post('/get-offer-history', getOfferHistoryResolver());
 
 // app.get('/get-offers', (req: Request, res: Response) => {
 //   //   console.log('resolver hit');
