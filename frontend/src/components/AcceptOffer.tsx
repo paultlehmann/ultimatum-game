@@ -36,13 +36,13 @@ const AcceptOffer = (props: IProps) => {
   const renderHistory = (opponentHistory: IOpponentHistory[]) => {
     return (
       <ul>
-        {opponentHistory.map((historyItem: IOpponentHistory) => {
+        {opponentHistory.map((historyItem: IOpponentHistory, index: number) => {
           const { accepted, amount, round_number } = historyItem;
           // return
           // <List>
           //   <ListItem>
           return (
-            <li>
+            <li key={`history-row-${index + 1}`}>
               {`Round ${round_number}: Was offered $${amount} and `}
               {accepted ? (
                 <span style={{ fontWeight: 'bold', color: 'green' }}>

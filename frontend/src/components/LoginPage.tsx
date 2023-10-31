@@ -26,7 +26,9 @@ const LoginPage = (props: IProps) => {
   const handleLoginClick = () => {
     // setUser({ ...user, userName: userNameFieldValue });
     setLoginClicked(true);
-    createUser(userNameFieldValue, false, setUser);
+    if (!errorState) {
+      createUser(userNameFieldValue, false, setUser);
+    }
   };
 
   //   useEffect(() => console.log('new state',{loginClicked,userNameFieldValue}), [loginClicked, userNameFieldValue])

@@ -53,7 +53,7 @@ const MakeOffer = (props: IProps) => {
         <CardContent>
           {/* <div>Offer:</div> */}
           <TextField
-            autoFocus={true}
+            // autoFocus={true}
             // defaultValue={5}
             value={offer || ''}
             placeholder={'0'}

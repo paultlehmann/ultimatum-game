@@ -175,6 +175,7 @@ export const getOfferHistoryResolver = () => (req: Request, res: Response) => {
   select round_number, amount, accepted from offers
   where recipient_id = (select offerer_id from offers where recipient_id = ${userId} and game_id = ${gameId} and round_number = ${round})
   and game_id = ${gameId}
+  and round_number < ${round}
   and accepted is not null
   order by round_number asc
   `;
