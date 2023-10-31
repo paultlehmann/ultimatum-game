@@ -4,16 +4,20 @@ import ButtonWithRefresh from './ButtonWithRefresh';
 import AcceptOffer from './AcceptOffer';
 import MakeOffer from './MakeOffer';
 import { addParticipantToGame, checkForGames } from '../queries/games';
-import { IGameRow, IGameState, SetState, TGameStage } from '../types';
+import { IGameRow, IGameState, IUser, SetState, TGameStage } from '../types';
+import Standings from './Standings';
 
 interface IProps {
   gameState: IGameState;
   setGameState: SetState<IGameState>;
-  userId: number;
+  // userId: number;
+  user: IUser;
 }
 
 const GameLobby = (props: IProps) => {
-  const { gameState, setGameState, userId } = props;
+  const { gameState, setGameState, user } = props;
+
+  const { id: userId, userName } = user;
 
   const [checkedForGames, setCheckedForGames] = useState<boolean>(false);
   const [gameQueryResult, setGameQueryResult] = useState<IGameRow | null>(null);
@@ -69,6 +73,17 @@ const GameLobby = (props: IProps) => {
             gameState={gameState}
             setGameState={setGameState}
             userId={userId}
+          />
+        );
+      case 'post':
+      default:
+        return (
+          <Standings
+            gameId={gameState.id}
+            setCheckedForGames={setCheckedForGames}
+            setGameQueryResult={setGameQueryResult}
+            setGameState={setGameState}
+            userName={userName}
           />
         );
     }

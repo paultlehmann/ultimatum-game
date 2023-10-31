@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { QueryResult } from 'pg';
 import _ from 'lodash';
 import { pool } from '..';
-import { IOffer } from '../types';
+import { IExtendedOffer, IOffer } from '../types';
 
 // export const getOffersResolver = () => (req: Request, res: Response) => {
 //   //   console.log('resolver hit');
@@ -26,6 +26,11 @@ import { IOffer } from '../types';
 //       return res.status(500).send(error);
 //     });
 // };
+
+interface IUserForStandings {
+  id: number;
+  name: string;
+}
 
 export const saveOfferResolver = () => (req: Request, res: Response) => {
   const { amount, game_id, offerer_id, round_number } = req.body;
@@ -175,4 +180,104 @@ export const getOfferHistoryResolver = () => (req: Request, res: Response) => {
   `;
 
   pool.query(query).then((result: QueryResult) => res.status(200).send(result));
+};
+
+export const getAllOffersResolver = () => (req: Request, res: Response) => {
+  const { gameId } = req.body;
+
+  const query = `
+select accepted, amount, offerer_id offerer, recipient_id recipient, users.username offerer_name from offers
+join users on users.id = offerer_id
+where game_id = ${gameId}
+and accepted is not null
+order by round_number asc
+`;
+
+  console.log('getAllOffers query', query);
+
+  pool.query(query).then((result: QueryResult) => {
+    // console.log('result rows',result.rows)
+    const users = _.uniqBy(
+      result.rows.map((row: IExtendedOffer) => ({
+        id: row.offerer,
+        name: row.offerer_name
+      })),
+      'id'
+    );
+
+    console.log('users', users);
+
+    const getUserWinningsTotal = (userId: number) => {
+      const relevantRows = result.rows.filter(
+        (row: IExtendedOffer) =>
+          row.accepted && (row.offerer === userId || row.recipient === userId)
+      );
+      // console.log(`relevant rows for ${userId}: `,relevantRows)
+      const totalWinnings = relevantRows.reduce(
+        (runningTotal: number, currentRow: IExtendedOffer) => {
+          // console.log('reduce stuff,',{runningTotal, currentRow, relevantRows})
+          return (
+            runningTotal +
+            (currentRow.recipient === userId
+              ? currentRow.amount
+              : 10 - currentRow.amount)
+          );
+        },
+        0
+      );
+
+      console.log(`total winnings for ${userId}: `);
+      console.log(totalWinnings);
+      return totalWinnings;
+    };
+
+    const getOffersIAcceptedCount = (userId: number) =>
+      result.rows.filter(
+        (row: IExtendedOffer) => row.accepted && row.recipient === userId
+      ).length;
+
+    const getOffersIRejectedCount = (userId: number) =>
+      result.rows.filter(
+        (row: IExtendedOffer) => !row.accepted && row.recipient === userId
+      ).length;
+
+    const getMyOffersAcceptedCount = (userId: number) =>
+      result.rows.filter(
+        (row: IExtendedOffer) => row.accepted && row.offerer === userId
+      ).length;
+
+    const getMyOffersRejectedCount = (userId: number) =>
+      result.rows.filter(
+        (row: IExtendedOffer) => !row.accepted && row.offerer === userId
+      ).length;
+
+    const getAverageOffer = (userId: number) => {
+      const relevantRows = result.rows.filter(
+        (row: IExtendedOffer) => row.offerer === userId
+      );
+      return (
+        relevantRows.reduce(
+          (runningTotal: number, currentRow: IExtendedOffer) =>
+            runningTotal + currentRow.amount,
+          0
+        ) / relevantRows.length
+      );
+    };
+
+    const returnData = users.map((user: IUserForStandings) => {
+      const { id, name } = user;
+      return {
+        username: name,
+        winnings: getUserWinningsTotal(id),
+        offersIAccepted: getOffersIAcceptedCount(id),
+        offersIRejected: getOffersIRejectedCount(id),
+        myOffersAccepted: getMyOffersAcceptedCount(id),
+        myOffersRejected: getMyOffersRejectedCount(id),
+        averageOffer: getAverageOffer(id)
+      };
+    });
+
+    res.status(200).send(returnData);
+    // res.status(200).send(result)
+  });
 };

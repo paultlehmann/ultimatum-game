@@ -21,6 +21,7 @@ import {
   checkOfferStatuses,
   shuffleAndAssignOffers
 } from '../queries/offers';
+import Standings from './Standings';
 
 interface IProps {
   gameState: IGameState;
@@ -224,15 +225,10 @@ const ManageGame = (props: IProps) => {
                     <Button
                       variant={'contained'}
                       color={'error'}
-                      // onClick={() => {
-                      //   acceptOrRejectOffer(
-                      //     userId,
-                      //     gameState.id,
-                      //     gameState.round,
-                      //     'reject'
-                      //   );
-                      //   setHasAcceptedOrRejected('rejected');
-                      // }}
+                      onClick={() => {
+                        updateGame(gameState.id, 'post');
+                        setGameState({ ...gameState, stage: 'post' });
+                      }}
                     >
                       End Game
                     </Button>
@@ -244,6 +240,19 @@ const ManageGame = (props: IProps) => {
         );
     }
   };
+
+  if (gameState.stage === 'post') {
+    return (
+      <>
+        <Standings
+          gameId={gameState.id}
+          setCheckedForGames={setCheckedForGames}
+          setGameQueryResult={setGameQueryResult}
+          setGameState={setGameState}
+        />
+      </>
+    );
+  }
 
   if (gameState.id) {
     return (

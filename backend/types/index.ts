@@ -7,3 +7,10 @@ export interface IOffer {
   recipient_id?: number;
   round_number: number;
 }
+
+export interface IExtendedOffer extends IOffer {
+  accepted: boolean;
+  offerer: number;
+  offerer_name: string;
+  recipient: number;
+}

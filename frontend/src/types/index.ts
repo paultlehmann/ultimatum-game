@@ -33,3 +33,13 @@ export interface IOpponentHistory {
   amount: number;
   round_number: number;
 }
+
+export interface IStandingsRow {
+  averageOffer: number;
+  myOffersAccepted: number;
+  myOffersRejected: number;
+  offersIAccepted: number;
+  offersIRejected: number;
+  username: string;
+  winnings: number;
+}

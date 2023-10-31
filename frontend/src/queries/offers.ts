@@ -1,5 +1,11 @@
 import _ from 'lodash';
-import { IGameState, IOffer, IOpponentHistory, SetState } from '../types';
+import {
+  IGameState,
+  IOffer,
+  IOpponentHistory,
+  IStandingsRow,
+  SetState
+} from '../types';
 
 // export const getOffers = (setOfferData: (newVal: any) => void) => {
 //   fetch('http://localhost:8008/get-offers')
@@ -231,5 +237,27 @@ export const getOfferHistory = (
     .then((data: any) => {
       console.log('getOfferHistory data', data);
       setOpponentHistory(data.rows);
+    });
+};
+
+export const getAllOffers = (
+  setResults: SetState<IStandingsRow[]>,
+  gameId: number
+) => {
+  fetch('http://localhost:8008/get-all-offers', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      gameId
+    })
+  })
+    .then(async (response: Response) => {
+      // console.log('response', response);
+      // console.log('response.text()', await response.text());
+      return response.json();
+    })
+    .then((data: IStandingsRow[]) => {
+      console.log('getAllOffers data', data);
+      setResults(_.orderBy(data, ['winnings'], ['desc']));
     });
 };

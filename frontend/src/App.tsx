@@ -52,7 +52,7 @@ const App = () => {
           <GameLobby
             gameState={gameState}
             setGameState={setGameState}
-            userId={user.id}
+            user={user}
           />
         )}
       </AppContainer>
