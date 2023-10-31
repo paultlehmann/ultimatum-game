@@ -17,6 +17,7 @@ const TopHeader = (props: IProps) => {
     <div
       style={{
         border: '1px solid black',
+        borderRadius: '5px',
         margin: '5px',
         height: '10vh',
         position: 'sticky',
@@ -25,10 +26,14 @@ const TopHeader = (props: IProps) => {
         justifyContent: 'space-between'
       }}
     >
-      <div style={{ margin: '5px', textAlign: 'left', width: '33%' }}>
-        <div>Game ID: {gameId}</div>
-        <div>Round: {round}</div>
-      </div>
+      {gameId ? (
+        <div style={{ margin: '5px', textAlign: 'left', width: '33%' }}>
+          <div>Game ID: {gameId}</div>
+          <div>Round: {round}</div>
+        </div>
+      ) : (
+        <div style={{ width: '33%' }} />
+      )}
       <div
         style={{
           textAlign: 'center',
@@ -56,7 +61,7 @@ const TopHeader = (props: IProps) => {
               userName: ''
             });
           }}
-          style={{ cursor: 'pointer' }}
+          style={{ cursor: 'pointer', fontWeight: 'bold' }}
           underline={'hover'}
         >
           Logout
