@@ -35,6 +35,19 @@ const ManageGame = (props: IProps) => {
 
   const stages: TGameStage[] = ['pre', 'offer', 'accept'];
 
+  const getStageName = (shortForm: TGameStage) => {
+    switch (shortForm) {
+      case 'pre':
+        return 'Pre-Game';
+      case 'offer':
+        return 'Making Offers';
+      case 'accept':
+        return 'Accepting/Rejecting Offers';
+      case 'post':
+        return 'Post-Game';
+    }
+  };
+
   const getGameBoxContent = () => {
     switch (gameState.stage) {
       case 'pre':
@@ -195,7 +208,7 @@ const ManageGame = (props: IProps) => {
         <CardContent>
           <div>Game ID: {gameState.id}</div>
           <div>Round: {gameState.round}</div>
-          <div>Stage: {gameState.stage}</div>
+          <div>Stage: {getStageName(gameState.stage)}</div>
           {getGameBoxContent()}
         </CardContent>
       </Card>

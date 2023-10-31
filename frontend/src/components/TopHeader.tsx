@@ -63,7 +63,7 @@ const TopHeader = (props: IProps) => {
           style={{ cursor: 'pointer', fontWeight: 'bold' }}
           underline={'hover'}
         >
-          Logout
+          Log Out
         </Link>
       </div>
     </div>
