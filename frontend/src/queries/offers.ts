@@ -155,7 +155,8 @@ export const checkAcceptStatuses = (
 export const shuffleAndAssignOffers = (
   gameId: number,
   round: number,
-  userName: string,
+  // userName: string,
+  participantNames: string[],
   setGameState: SetState<IGameState>
 ) => {
   console.log('shuffleAndAssignOffers hit');
@@ -165,7 +166,7 @@ export const shuffleAndAssignOffers = (
     body: JSON.stringify({
       gameId,
       round,
-      userName
+      participantNames
     })
   }).then(async () => {
     // console.log('response', response);

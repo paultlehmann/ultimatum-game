@@ -147,7 +147,11 @@ export const addParticipantToGame = (gameId: number, userId: number) => {
   });
 };
 
-export const advanceRound = (gameId: number, currentRound: number) => {
+export const advanceRound = (
+  gameId: number,
+  currentRound: number,
+  setGameState: SetState<IGameState>
+) => {
   fetch('http://localhost:8008/advance-round', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -155,5 +159,14 @@ export const advanceRound = (gameId: number, currentRound: number) => {
       gameId,
       currentRound
     })
+  }).then(async () => {
+    // console.log('response', response);
+    // console.log('response.text()', await response.text());
+    // return await response.json();
+    setGameState((prevState: IGameState) => ({
+      ...prevState,
+      stage: 'offer',
+      round: currentRound + 1
+    }));
   });
 };

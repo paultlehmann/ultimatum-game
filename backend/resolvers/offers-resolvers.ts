@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { QueryResult } from 'pg';
+import _ from 'lodash';
 import { pool } from '..';
 import { IOffer } from '../types';
 
@@ -69,21 +70,66 @@ export const checkAcceptStatusesResolver =
 
 export const shuffleAndAssignOffersResolver =
   () => (req: Request, res: Response) => {
-    const { gameId, round, userName } = req.body;
+    const {
+      gameId,
+      participantNames,
+      round
+      //userName
+    } = req.body;
 
-    const query = `
-  update offers
-  set recipient_id = (
-  select coalesce(participants[(array_position(participants, (select id from users where username = '${userName}')) + ${round})], participants[1])
-  from games
-  where id = ${gameId}
-  )
-  where game_id = ${gameId} and round_number = ${round} and offerer_id = (select id from users where username = '${userName}')
-  `;
+    // const round = 7
 
-    pool.query(query).then((result: QueryResult) => res.status(200).send());
+    participantNames.forEach((participantName: string, index: number) => {
+      // console.log(`original names for ${participantName} index ${index}`,participantNames)
+      const participantNamesCopy = _.clone(participantNames);
+      const participantNamesCopy2 = _.clone(participantNames);
+      // participantNamesCopy.shift(index)
+      participantNamesCopy.splice(0, index);
+      // console.log('post-shift names',participantNamesCopy)
+      participantNamesCopy2.splice(index, participantNames.length);
+      // participantNamesCopy2.slice(1)
+      // participantNamesCopy2.reverse()
+      // console.log('participantNamesCopy2',participantNamesCopy2)
+      const reorderedNames = participantNamesCopy.concat(participantNamesCopy2);
+      reorderedNames.shift();
+      // const reorderedNames = [...participantNames].push(participantNames.shift(index))
+      // console.log(`reordered names for ${participantName}: ${reorderedNames}`)
 
-    console.log('shuffleAndAssignOffersResolver query', query);
+      // const relevantIndex = round % reorderedNames.length
+
+      // console.log('relevantIndex',{round,reorderedNames,relevantIndex})
+
+      const relevantOpponent =
+        reorderedNames[(round - 1) % reorderedNames.length];
+
+      // console.log(`opponent for ${participantName} in round ${round}: ${relevantOpponent}`)
+
+      const query = `
+      update offers
+      set recipient_id = (
+        select id from users where username = '${relevantOpponent}'
+      )
+      where game_id = ${gameId} and round_number = ${round} and offerer_id = (select id from users where username = '${participantName}')
+      `;
+
+      // console.log('update query',query)
+
+      pool.query(query).then((result: QueryResult) => res.status(200).send());
+    });
+
+    //   const query = `
+    // update offers
+    // set recipient_id = (
+    // select coalesce(participants[(array_position(participants, (select id from users where username = '${userName}')) + ${round})], participants[1])
+    // from games
+    // where id = ${gameId}
+    // )
+    // where game_id = ${gameId} and round_number = ${round} and offerer_id = (select id from users where username = '${userName}')
+    // `;
+
+    //   pool.query(query).then((result: QueryResult) => res.status(200).send());
+
+    //   console.log('shuffleAndAssignOffersResolver query', query);
   };
 
 export const getOffersResolver = () => (req: Request, res: Response) => {

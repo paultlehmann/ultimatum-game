@@ -39,7 +39,7 @@ const AcceptOffer = (props: IProps) => {
     return (
       <>
         <div>Offer {hasAcceptedOrRejected}!</div>
-        <div>Waiting for other players to respond to offers.</div>
+        <div>Waiting for host to start next round or end game.</div>
         <ButtonWithRefresh
           text={'Refresh'}
           onClick={() =>

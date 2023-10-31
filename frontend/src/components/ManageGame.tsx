@@ -116,17 +116,20 @@ const ManageGame = (props: IProps) => {
                   variant={'contained'}
                   onClick={() => {
                     console.log('aaa', gameState.participantNames);
-                    gameState.participantNames?.forEach(
-                      (participantName: string) =>
-                        shuffleAndAssignOffers(
-                          gameState.id,
-                          gameState.round,
-                          participantName,
-                          setGameState
-                        )
+                    // gameState.participantNames?.forEach(
+                    //   (participantName: string) =>
+                    shuffleAndAssignOffers(
+                      gameState.id,
+                      gameState.round,
+                      // participantName,
+                      participantNames,
+                      setGameState
                     );
+                    // );
 
                     updateGame(gameState.id, 'accept');
+
+                    setOffersIn([]);
 
                     // setGameState((prevState: IGameState) => ({ ...prevState, stage: 'accept' }));
                   }}
@@ -201,12 +204,17 @@ const ManageGame = (props: IProps) => {
                       variant={'contained'}
                       color={'success'}
                       onClick={() => {
-                        advanceRound(gameState.id, gameState.round);
-                        setGameState({
-                          ...gameState,
-                          stage: 'offer',
-                          round: gameState.round + 1
-                        });
+                        advanceRound(
+                          gameState.id,
+                          gameState.round,
+                          setGameState
+                        );
+                        // setGameState({
+                        //   ...gameState,
+                        //   stage: 'offer',
+                        //   round: gameState.round + 1
+                        // });
+                        setAcceptsIn([]);
                       }}
                     >
                       Next Round
