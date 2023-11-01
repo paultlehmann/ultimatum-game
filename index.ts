@@ -1,4 +1,5 @@
 import express, { Express, NextFunction, Request, Response } from 'express';
+import path from 'path';
 import { Pool } from 'pg';
 import 'dotenv/config';
 import {
@@ -41,6 +42,12 @@ app.use((req: Request, res: Response, next: NextFunction) => {
     'Content-Type, Access-Control-Allow-Headers'
   );
   next();
+});
+
+app.use(express.static(path.join(__dirname, 'frontend/build')));
+
+app.get('*', (req: Request, res: Response) => {
+  res.sendFile(path.join(__dirname, 'frontend/build', 'index.html'));
 });
 
 app.post('/check-for-games', checkForGamesResolver());
