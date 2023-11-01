@@ -8,8 +8,8 @@ interface IGameQueryOptions {
   stages?: TGameStage[];
 }
 
-const dbHost = import.meta.env.VITE_REACT_APP_DB_HOST;
-const backendPort = import.meta.env.VITE_REACT_APP_BACKEND_PORT;
+const dbHost = process.env.VITE_REACT_APP_DB_HOST;
+const backendPort = process.env.VITE_REACT_APP_BACKEND_PORT;
 
 export const checkForGames = (
   options: IGameQueryOptions,

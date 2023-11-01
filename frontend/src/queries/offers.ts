@@ -7,8 +7,8 @@ import {
   SetState
 } from '../types';
 
-const dbHost = import.meta.env.VITE_REACT_APP_DB_HOST;
-const backendPort = import.meta.env.VITE_REACT_APP_BACKEND_PORT;
+const dbHost = process.env.VITE_REACT_APP_DB_HOST;
+const backendPort = process.env.VITE_REACT_APP_BACKEND_PORT;
 
 export const getOffers = (
   setOffer: SetState<IOffer | null>,

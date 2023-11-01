@@ -6,9 +6,7 @@ export const createUser = (
   setUser: SetState<IUser>
 ) => {
   fetch(
-    `http://${import.meta.env.VITE_REACT_APP_DB_HOST}:${
-      import.meta.env.VITE_REACT_APP_BACKEND_PORT
-    }/create-user`,
+    `http://${process.env.VITE_REACT_APP_DB_HOST}:${process.env.VITE_REACT_APP_BACKEND_PORT}/create-user`,
     {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
