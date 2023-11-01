@@ -6,7 +6,8 @@
   "scripts": {
     "build": "tsc",
     "start": "node --require dotenv/config build/dist/index.js",
-    "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/index.js\"",
+    "dev_old": "concurrently \"npx tsc --watch\" \"nodemon -q dist/index.js\"",
+    "dev": "nodemon index.ts",
     "test": "nodemon index.ts"
   },
   "dependencies": {
