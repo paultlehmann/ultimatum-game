@@ -12,10 +12,18 @@ interface IUserForStandings {
 export const saveOfferResolver = () => (req: Request, res: Response) => {
   const { amount, game_id, offerer_id, round_number } = req.body;
 
-  pool.query(`insert into offers (game_id, round_number, offerer_id, amount)
-      values (${game_id}, ${round_number}, ${offerer_id}, ${amount})`);
+  try {
+    pool.query(`insert into offers (game_id, round_number, offerer_id, amount)
+      values (${game_id}, ${round_number}, ${offerer_id}, ${amount})
+      on conflict on constraint unique_offer do nothing
+      `);
 
-  return res.status(200).send('Data Received: ' + JSON.stringify(req.body));
+    return res.status(200).send('Data Received: ' + JSON.stringify(req.body));
+  } catch {
+    console.error(
+      'ERROR - Offer not saved! Offer probably already found for this round.'
+    );
+  }
 };
 
 export const checkOfferStatusesResolver =
