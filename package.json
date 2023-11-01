@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "main": "index.ts",
   "scripts": {
-    "build": "cd frontend && npm install && cd .. && npm install && tsc -w",
+    "build": "cd frontend && npm install && cd .. && tsc && npm install",
     "start": "node --require dotenv/config build/dist/index.js",
     "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/index.js\"",
     "test": "nodemon index.ts"
