@@ -4,8 +4,8 @@
   "version": "1.0.0",
   "main": "index.ts",
   "scripts": {
-    "build": "npx tsc && rm ./dist",
-    "start": "node dist/index.js",
+    "build": "tsc",
+    "start": "node --require dotenv/config build/dist/index.js",
     "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/index.js\"",
     "test": "nodemon index.ts"
   },
