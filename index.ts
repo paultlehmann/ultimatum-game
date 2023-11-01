@@ -23,7 +23,7 @@ import {
 } from './resolvers/offers-resolvers';
 
 const app: Express = express();
-const backendPort = process.env.VITE_REACT_APP_BACKEND_PORT;
+const backendPort = process.env.VITE_REACT_APP_BACKEND_PORT || 5000;
 
 export const pool = new Pool({
   user: process.env.VITE_REACT_APP_DB_USER,
