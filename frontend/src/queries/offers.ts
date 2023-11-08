@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import {
   IGameState,
+  ILastOfferStatus,
   IOffer,
   IOpponentHistory,
   IStandingsRow,
@@ -201,5 +202,29 @@ export const getAllOffers = (
     })
     .then((data: IStandingsRow[]) => {
       setResults(_.orderBy(data, ['winnings'], ['desc']));
+    });
+};
+
+export const checkIfSingleOfferAccepted = (
+  gameId: number,
+  userId: number,
+  round: number,
+  setLastOfferStatus: SetState<ILastOfferStatus | null>
+) => {
+  console.log('checkIfSingleOfferAccepted hit');
+  fetch(`http://${dbHost}:${backendPort}/check-if-single-offer-accepted`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      gameId,
+      userId,
+      round
+    })
+  })
+    .then(async (response: Response) => {
+      return response.json();
+    })
+    .then((data: any) => {
+      console.log('offer check data', data);
     });
 };

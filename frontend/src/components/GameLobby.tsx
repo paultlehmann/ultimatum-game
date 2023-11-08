@@ -10,11 +10,12 @@ import Standings from './Standings';
 interface IProps {
   gameState: IGameState;
   setGameState: SetState<IGameState>;
+  setWinnings: SetState<number>;
   user: IUser;
 }
 
 const GameLobby = (props: IProps) => {
-  const { gameState, setGameState, user } = props;
+  const { gameState, setGameState, setWinnings, user } = props;
 
   const { id: userId, userName } = user;
 
@@ -46,6 +47,7 @@ const GameLobby = (props: IProps) => {
           <MakeOffer
             gameState={gameState}
             setGameState={setGameState}
+            setWinnings={setWinnings}
             userId={userId}
           />
         );

@@ -1,4 +1,5 @@
 import { Link } from '@mui/material';
+import _ from 'lodash';
 import { IGameState, IUser, SetState } from '../types';
 
 interface IProps {
@@ -6,11 +7,21 @@ interface IProps {
   round: number;
   setGameState: SetState<IGameState>;
   setUser: SetState<IUser>;
+  setWinnings: SetState<number>;
   userName: string;
+  winnings?: number;
 }
 
 const TopHeader = (props: IProps) => {
-  const { gameId, round, setGameState, setUser, userName } = props;
+  const {
+    gameId,
+    round,
+    setGameState,
+    setUser,
+    userName,
+    setWinnings,
+    winnings
+  } = props;
 
   return (
     <div
@@ -27,8 +38,8 @@ const TopHeader = (props: IProps) => {
     >
       {gameId ? (
         <div style={{ margin: '5px', textAlign: 'left', width: '33%' }}>
-          <div>Game ID: {gameId}</div>
           <div>Round: {round}</div>
+          {!_.isUndefined(winnings) && <div>Money So Far: ${winnings}</div>}
         </div>
       ) : (
         <div style={{ width: '33%' }} />
@@ -59,6 +70,7 @@ const TopHeader = (props: IProps) => {
               id: 0,
               userName: ''
             });
+            setWinnings(0);
           }}
           style={{ cursor: 'pointer', fontWeight: 'bold' }}
           underline={'hover'}

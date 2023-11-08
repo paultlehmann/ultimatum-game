@@ -8,11 +8,22 @@ interface IProps {
   round: number;
   setGameState: SetState<IGameState>;
   setUser: SetState<IUser>;
+  setWinnings: SetState<number>;
   userName: string;
+  winnings?: number;
 }
 
 const AppContainer = (props: IProps) => {
-  const { children, gameId, round, setGameState, setUser, userName } = props;
+  const {
+    children,
+    gameId,
+    round,
+    setGameState,
+    setUser,
+    setWinnings,
+    userName,
+    winnings
+  } = props;
 
   return (
     <>
@@ -22,6 +33,8 @@ const AppContainer = (props: IProps) => {
         setGameState={setGameState}
         setUser={setUser}
         userName={userName}
+        setWinnings={setWinnings}
+        winnings={winnings}
       />
       <div
         style={{

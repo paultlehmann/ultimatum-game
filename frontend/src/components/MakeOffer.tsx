@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import {
   Button,
   Card,
@@ -10,19 +10,27 @@ import {
 import ButtonWithRefresh from './ButtonWithRefresh';
 import { saveOffer } from '../queries/offers';
 import { checkForGames } from '../queries/games';
+import { updateWinnings } from '../queries/login';
 import { IGameState, SetState } from '../types';
 
 interface IProps {
   gameState: IGameState;
   setGameState: SetState<IGameState>;
+  setWinnings: SetState<number>;
   userId: number;
 }
 
 const MakeOffer = (props: IProps) => {
-  const { gameState, setGameState, userId } = props;
+  const { gameState, setGameState, setWinnings, userId } = props;
 
   const [offer, setOffer] = useState<number>(5);
   const [offerSubmitted, setOfferSubmitted] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (gameState.round > 1) {
+      updateWinnings(userId, gameState.id, setWinnings);
+    }
+  }, []);
 
   if (!offerSubmitted) {
     return (

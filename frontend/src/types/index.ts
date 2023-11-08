@@ -42,3 +42,8 @@ export interface IStandingsRow {
   username: string;
   winnings: number;
 }
+
+export interface ILastOfferStatus {
+  accepted: boolean;
+  amount: number;
+}

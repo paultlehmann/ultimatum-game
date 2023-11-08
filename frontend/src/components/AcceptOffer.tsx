@@ -4,11 +4,18 @@ import _ from 'lodash';
 import ButtonWithRefresh from './ButtonWithRefresh';
 import {
   acceptOrRejectOffer,
+  // checkIfSingleOfferAccepted,
   getOfferHistory,
   getOffers
 } from '../queries/offers';
 import { checkForGames } from '../queries/games';
-import { IGameState, IOffer, IOpponentHistory, SetState } from '../types';
+import {
+  IGameState,
+  // ILastOfferStatus,
+  IOffer,
+  IOpponentHistory,
+  SetState
+} from '../types';
 
 interface IProps {
   gameState: IGameState;
@@ -26,11 +33,15 @@ const AcceptOffer = (props: IProps) => {
   const [hasAcceptedOrRejected, setHasAcceptedOrRejected] = useState<
     'accepted' | 'rejected' | null
   >(null);
+  // const [lastOfferStatus, setLastOfferStatus] = useState<ILastOfferStatus | null>(null)
 
   useEffect(() => {
     getOffers(setOffer, gameState.id, gameState.round, undefined, userId);
     getOfferHistory(setOpponentHistory, userId, gameState.id, gameState.round);
+    // checkIfSingleOfferAccepted(gameState.id, userId, gameState.round, setLastOfferStatus)
   }, []);
+
+  // useEffect(() => console.log('new lastOfferStatus',lastOfferStatus), [lastOfferStatus])
 
   const renderHistory = (opponentHistory: IOpponentHistory[]) => {
     return (

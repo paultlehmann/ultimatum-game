@@ -2,7 +2,8 @@ import { Request, Response } from 'express';
 import { QueryResult } from 'pg';
 import _ from 'lodash';
 import { pool } from '..';
-import { IExtendedOffer, IOffer } from '../types';
+import { getUserWinningsTotal } from './login-resolvers';
+import { IExtendedOffer } from '../types';
 
 interface IUserForStandings {
   id: number;
@@ -159,26 +160,6 @@ order by round_number asc
       'id'
     );
 
-    const getUserWinningsTotal = (userId: number) => {
-      const relevantRows = result.rows.filter(
-        (row: IExtendedOffer) =>
-          row.accepted && (row.offerer === userId || row.recipient === userId)
-      );
-      const totalWinnings = relevantRows.reduce(
-        (runningTotal: number, currentRow: IExtendedOffer) => {
-          return (
-            runningTotal +
-            (currentRow.recipient === userId
-              ? currentRow.amount
-              : 10 - currentRow.amount)
-          );
-        },
-        0
-      );
-
-      return totalWinnings;
-    };
-
     const getOffersIAcceptedCount = (userId: number) =>
       result.rows.filter(
         (row: IExtendedOffer) => row.accepted && row.recipient === userId
@@ -216,7 +197,7 @@ order by round_number asc
       const { id, name } = user;
       return {
         username: name,
-        winnings: getUserWinningsTotal(id),
+        winnings: getUserWinningsTotal(result, id),
         offersIAccepted: getOffersIAcceptedCount(id),
         offersIRejected: getOffersIRejectedCount(id),
         myOffersAccepted: getMyOffersAcceptedCount(id),
@@ -228,3 +209,18 @@ order by round_number asc
     res.status(200).send(returnData);
   });
 };
+
+export const checkIfSingleOfferAcceptedResolver =
+  () => (req: Request, res: Response) => {
+    const { gameId, userId, round } = req.body;
+
+    const query = `
+  select accepted from offers where game_id = ${gameId} and round_number = ${round} and offerer_id = ${userId}
+  `;
+
+    console.log('checkIfSingleOfferAcceptedResolver query', query);
+
+    pool
+      .query(query)
+      .then((result: QueryResult) => res.status(200).send(result));
+  };

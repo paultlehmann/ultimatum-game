@@ -9,10 +9,14 @@ import {
   getParticipantsByGameResolver,
   updateGameResolver
 } from './resolvers/games-resolvers';
-import { createUserResolver } from './resolvers/login-resolvers';
+import {
+  createUserResolver,
+  updateWinningsResolver
+} from './resolvers/login-resolvers';
 import {
   acceptOrRejectOfferResolver,
   checkAcceptStatusesResolver,
+  checkIfSingleOfferAcceptedResolver,
   checkOfferStatusesResolver,
   getAllOffersResolver,
   getOfferHistoryResolver,
@@ -72,6 +76,13 @@ app.post('/advance-round', advanceRoundResolver());
 app.post('/get-offer-history', getOfferHistoryResolver());
 
 app.post('/get-all-offers', getAllOffersResolver());
+
+app.post(
+  '/check-if-single-offer-accepted',
+  checkIfSingleOfferAcceptedResolver()
+);
+
+app.post('/update-winnings', updateWinningsResolver());
 
 app.listen(backendPort, () => {
   console.log(

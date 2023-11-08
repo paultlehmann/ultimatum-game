@@ -20,6 +20,8 @@ const App = () => {
     stage: 'pre'
   });
 
+  const [winnings, setWinnings] = useState<number>(0);
+
   if (!user.userName) {
     return <LoginPage setUser={setUser} />;
   } else {
@@ -30,6 +32,8 @@ const App = () => {
         setGameState={setGameState}
         setUser={setUser}
         userName={user.userName}
+        setWinnings={setWinnings}
+        winnings={!user.admin ? winnings : undefined}
       >
         {user.admin ? (
           <ManageGame
@@ -41,6 +45,7 @@ const App = () => {
           <GameLobby
             gameState={gameState}
             setGameState={setGameState}
+            setWinnings={setWinnings}
             user={user}
           />
         )}
