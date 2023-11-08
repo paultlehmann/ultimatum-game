@@ -10,13 +10,21 @@ import {
 import { useEffect, useState } from 'react';
 import _ from 'lodash';
 import { getAllOffers } from '../queries/offers';
-import { IGameRow, IGameState, IStandingsRow, SetState } from '../types';
+import {
+  IGameRow,
+  IGameState,
+  ILastOfferStatus,
+  IStandingsRow,
+  SetState
+} from '../types';
 
 interface IProps {
   gameId: number;
   setCheckedForGames: SetState<boolean>;
   setGameQueryResult: SetState<IGameRow | null>;
   setGameState: SetState<IGameState>;
+  setLastOfferStatus?: SetState<ILastOfferStatus | null>;
+  setWinnings?: SetState<number>;
   userName?: string;
 }
 
@@ -31,6 +39,8 @@ const Standings = (props: IProps) => {
     setCheckedForGames,
     setGameQueryResult,
     setGameState,
+    setLastOfferStatus,
+    setWinnings,
     userName
   } = props;
 
@@ -206,6 +216,12 @@ const Standings = (props: IProps) => {
         onClick={() => {
           setGameQueryResult(null);
           setCheckedForGames(false);
+          if (setLastOfferStatus) {
+            setLastOfferStatus(null);
+          }
+          if (setWinnings) {
+            setWinnings(0);
+          }
           setGameState({
             admin: 0,
             id: 0,

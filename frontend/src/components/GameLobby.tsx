@@ -77,6 +77,8 @@ const GameLobby = (props: IProps) => {
             setCheckedForGames={setCheckedForGames}
             setGameQueryResult={setGameQueryResult}
             setGameState={setGameState}
+            setLastOfferStatus={setLastOfferStatus}
+            setWinnings={setWinnings}
             userName={userName}
           />
         );

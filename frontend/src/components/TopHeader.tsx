@@ -45,7 +45,7 @@ const TopHeader = (props: IProps) => {
     >
       {gameId ? (
         <div style={{ margin: '5px', textAlign: 'left', width: '33%' }}>
-          {!_.isUndefined(winnings) && lastOfferStatus && (
+          {round > 1 && !_.isUndefined(winnings) && lastOfferStatus && (
             <>
               <div>
                 Money So Far:{' '}
