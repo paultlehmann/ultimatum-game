@@ -13,12 +13,22 @@ export const saveOfferResolver = () => (req: Request, res: Response) => {
   const { amount, game_id, offerer_id, round_number } = req.body;
 
   try {
-    pool.query(`insert into offers (game_id, round_number, offerer_id, amount)
-      values (${game_id}, ${round_number}, ${offerer_id}, ${amount})
-      on conflict on constraint unique_offer do nothing
-      `);
+    const query = `
+      update offers
+      set amount = ${amount}
+      where game_id = ${game_id} and round_number = ${round_number} and offerer_id = ${offerer_id}
+    `;
 
-    return res.status(200).send('Data Received: ' + JSON.stringify(req.body));
+    // pool.query(`insert into offers (game_id, round_number, offerer_id, amount)
+    //   values (${game_id}, ${round_number}, ${offerer_id}, ${amount})
+    //   on conflict on constraint unique_offer do nothing
+    //   `);
+
+    pool
+      .query(query)
+      .then((result: QueryResult) => res.status(200).send(result));
+
+    // return res.status(200).send('Data Received: ' + JSON.stringify(req.body));
   } catch {
     console.error(
       'ERROR - Offer not saved! Offer probably already found for this round.'
@@ -33,8 +43,10 @@ export const checkOfferStatusesResolver =
     const checkStatusesQuery = `
   select users.username from offers 
   join users on offers.offerer_id = users.id
-  where game_id = ${gameId} and round_number = ${round}
+  where game_id = ${gameId} and round_number = ${round} and amount is not null
   `;
+
+    console.log('checkOfferStatusesQuery', checkStatusesQuery);
 
     pool
       .query(checkStatusesQuery)
@@ -50,6 +62,8 @@ export const checkAcceptStatusesResolver =
     join users on offers.recipient_id = users.id
     where game_id = ${gameId} and round_number = ${round}
   `;
+
+    console.log('checkAcceptStatusesQuery', checkStatusesQuery);
 
     pool
       .query(checkStatusesQuery)

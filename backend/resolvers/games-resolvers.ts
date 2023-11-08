@@ -88,7 +88,14 @@ export const getParticipantsByGameResolver =
   };
 
 export const updateGameResolver = () => (req: Request, res: Response) => {
-  const { gameId, newStage, assignOffers, participantNames, round } = req.body;
+  const {
+    gameId,
+    newStage,
+    assignOffers,
+    participantNames,
+    round,
+    advanceRound
+  } = req.body;
 
   if (assignOffers) {
     participantNames.forEach((participantName: string, index: number) => {
@@ -122,10 +129,12 @@ export const updateGameResolver = () => (req: Request, res: Response) => {
 
   const updateGameQuery = `
     update games
-    set stage = '${newStage}'
+    set stage = '${newStage}'${advanceRound ? `, round = ${round}` : ''}
     where id = ${gameId}
     returning stage
     `;
+
+  console.log('updateGameQuery', updateGameQuery);
 
   pool
     .query(updateGameQuery)

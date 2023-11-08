@@ -99,7 +99,8 @@ export const updateGame = (
   newStage: TGameStage,
   assignOffers?: boolean,
   participantNames?: string[],
-  round?: number
+  round?: number,
+  advanceRound?: boolean
 ) => {
   fetch(`http://${dbHost}:${backendPort}/update-game`, {
     method: 'POST',
@@ -109,7 +110,8 @@ export const updateGame = (
       newStage,
       assignOffers,
       participantNames,
-      round
+      round,
+      advanceRound
     })
   });
 };

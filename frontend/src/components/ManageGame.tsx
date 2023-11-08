@@ -3,7 +3,7 @@ import { Button, Card, CardContent, Grid } from '@mui/material';
 import _ from 'lodash';
 import ButtonWithRefresh from './ButtonWithRefresh';
 import {
-  advanceRound,
+  // advanceRound,
   checkForGames,
   createGame,
   getParticipantsByGame,
@@ -12,8 +12,8 @@ import {
 import { IGameRow, IGameState, SetState, TGameStage } from '../types';
 import {
   checkAcceptStatuses,
-  checkOfferStatuses,
-  shuffleAndAssignOffers
+  checkOfferStatuses
+  // shuffleAndAssignOffers
 } from '../queries/offers';
 import Standings from './Standings';
 
@@ -108,14 +108,16 @@ const ManageGame = (props: IProps) => {
                 <Button
                   variant={'contained'}
                   onClick={() => {
-                    shuffleAndAssignOffers(
-                      gameState.id,
-                      gameState.round,
-                      participantNames,
-                      setGameState
-                    );
+                    // shuffleAndAssignOffers(
+                    //   gameState.id,
+                    //   gameState.round,
+                    //   participantNames,
+                    //   setGameState
+                    // );
 
                     updateGame(gameState.id, 'accept');
+
+                    setGameState({ ...gameState, stage: 'accept' });
 
                     setOffersIn([]);
                   }}
@@ -164,12 +166,25 @@ const ManageGame = (props: IProps) => {
                       variant={'contained'}
                       color={'success'}
                       onClick={() => {
-                        advanceRound(
+                        // advanceRound(
+                        //   gameState.id,
+                        //   gameState.round,
+                        //   setGameState
+                        // );
+                        updateGame(
                           gameState.id,
-                          gameState.round,
-                          setGameState
+                          'offer',
+                          true,
+                          participantNames,
+                          gameState.round + 1,
+                          true
                         );
                         setAcceptsIn([]);
+                        setGameState({
+                          ...gameState,
+                          stage: 'offer',
+                          round: gameState.round + 1
+                        });
                       }}
                     >
                       Next Round
