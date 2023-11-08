@@ -94,13 +94,22 @@ export const getParticipantsByGame = (
     });
 };
 
-export const updateGame = (gameId: number, newStage: TGameStage) => {
+export const updateGame = (
+  gameId: number,
+  newStage: TGameStage,
+  assignOffers?: boolean,
+  participantNames?: string[],
+  round?: number
+) => {
   fetch(`http://${dbHost}:${backendPort}/update-game`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       gameId,
-      newStage
+      newStage,
+      assignOffers,
+      participantNames,
+      round
     })
   });
 };

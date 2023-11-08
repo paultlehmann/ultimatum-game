@@ -88,7 +88,37 @@ export const getParticipantsByGameResolver =
   };
 
 export const updateGameResolver = () => (req: Request, res: Response) => {
-  const { gameId, newStage } = req.body;
+  const { gameId, newStage, assignOffers, participantNames, round } = req.body;
+
+  if (assignOffers) {
+    participantNames.forEach((participantName: string, index: number) => {
+      const participantNamesCopy = _.clone(participantNames);
+      const participantNamesCopy2 = _.clone(participantNames);
+      participantNamesCopy.splice(0, index);
+      participantNamesCopy2.splice(index, participantNames.length);
+      const reorderedNames = participantNamesCopy.concat(participantNamesCopy2);
+      reorderedNames.shift();
+
+      const relevantOpponent =
+        reorderedNames[(round - 1) % reorderedNames.length];
+
+      // const query = `
+      // update offers
+      // set recipient_id = (
+      //   select id from users where username = '${relevantOpponent}'
+      // )
+      // where game_id = ${gameId} and round_number = ${round} and offerer_id = (select id from users where username = '${participantName}')
+      // `;
+
+      const query = `
+        insert into offers (game_id, round_number, offerer_id, recipient_id)
+        values (${gameId}, ${round}, (select id from users where username = '${participantName}'), (select id from users where username = '${relevantOpponent}'))
+        `;
+
+      pool.query(query);
+      // .then((result: QueryResult) => res.status(200).send());
+    });
+  }
 
   const updateGameQuery = `
     update games

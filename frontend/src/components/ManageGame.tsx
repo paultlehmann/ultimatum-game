@@ -67,7 +67,13 @@ const ManageGame = (props: IProps) => {
                 <br />
                 <Button
                   onClick={() => {
-                    updateGame(gameState.id, 'offer');
+                    updateGame(
+                      gameState.id,
+                      'offer',
+                      true,
+                      participantNames,
+                      gameState.round
+                    );
                     setGameState({ ...gameState, stage: 'offer' });
                   }}
                   style={{ marginTop: '5px' }}
