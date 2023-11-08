@@ -130,7 +130,7 @@ export const getOfferHistoryResolver = () => (req: Request, res: Response) => {
 
   const query = `
   select round_number, amount, accepted from offers
-  where recipient_id = (select offerer_id from offers where recipient_id = ${userId} and game_id = ${gameId} and round_number = ${round})
+  where recipient_id = (select recipient_id from offers where offerer_id = ${userId} and game_id = ${gameId} and round_number = ${round})
   and game_id = ${gameId}
   and round_number < ${round}
   and accepted is not null

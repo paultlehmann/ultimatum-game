@@ -5,7 +5,7 @@ import ButtonWithRefresh from './ButtonWithRefresh';
 import {
   acceptOrRejectOffer,
   // checkIfSingleOfferAccepted,
-  getOfferHistory,
+  // getOfferHistory,
   getOffers
 } from '../queries/offers';
 import { checkForGames } from '../queries/games';
@@ -13,7 +13,7 @@ import {
   IGameState,
   // ILastOfferStatus,
   IOffer,
-  IOpponentHistory,
+  // IOpponentHistory,
   SetState
 } from '../types';
 
@@ -27,9 +27,9 @@ const AcceptOffer = (props: IProps) => {
   const { gameState, setGameState, userId } = props;
 
   const [offer, setOffer] = useState<IOffer | null>(null);
-  const [opponentHistory, setOpponentHistory] = useState<IOpponentHistory[]>(
-    []
-  );
+  // const [opponentHistory, setOpponentHistory] = useState<IOpponentHistory[]>(
+  //   []
+  // );
   const [hasAcceptedOrRejected, setHasAcceptedOrRejected] = useState<
     'accepted' | 'rejected' | null
   >(null);
@@ -37,35 +37,35 @@ const AcceptOffer = (props: IProps) => {
 
   useEffect(() => {
     getOffers(setOffer, gameState.id, gameState.round, undefined, userId);
-    getOfferHistory(setOpponentHistory, userId, gameState.id, gameState.round);
+    // getOfferHistory(setOpponentHistory, userId, gameState.id, gameState.round);
     // checkIfSingleOfferAccepted(gameState.id, userId, gameState.round, setLastOfferStatus)
   }, []);
 
   // useEffect(() => console.log('new lastOfferStatus',lastOfferStatus), [lastOfferStatus])
 
-  const renderHistory = (opponentHistory: IOpponentHistory[]) => {
-    return (
-      <ul>
-        {opponentHistory.map((historyItem: IOpponentHistory, index: number) => {
-          const { accepted, amount, round_number } = historyItem;
-          return (
-            <li key={`history-row-${index + 1}`}>
-              {`Round ${round_number}: Was offered $${amount} and `}
-              {accepted ? (
-                <span style={{ fontWeight: 'bold', color: 'green' }}>
-                  accepted
-                </span>
-              ) : (
-                <span style={{ fontWeight: 'bold', color: 'red' }}>
-                  rejected
-                </span>
-              )}
-            </li>
-          );
-        })}
-      </ul>
-    );
-  };
+  // const renderHistory = (opponentHistory: IOpponentHistory[]) => {
+  //   return (
+  //     <ul>
+  //       {opponentHistory.map((historyItem: IOpponentHistory, index: number) => {
+  //         const { accepted, amount, round_number } = historyItem;
+  //         return (
+  //           <li key={`history-row-${index + 1}`}>
+  //             {`Round ${round_number}: Was offered $${amount} and `}
+  //             {accepted ? (
+  //               <span style={{ fontWeight: 'bold', color: 'green' }}>
+  //                 accepted
+  //               </span>
+  //             ) : (
+  //               <span style={{ fontWeight: 'bold', color: 'red' }}>
+  //                 rejected
+  //               </span>
+  //             )}
+  //           </li>
+  //         );
+  //       })}
+  //     </ul>
+  //   );
+  // };
 
   if (hasAcceptedOrRejected) {
     return (
@@ -94,12 +94,12 @@ const AcceptOffer = (props: IProps) => {
             (other player gets $
             <span style={{ color: 'red' }}>{10 - offer.amount}</span>)
           </div>
-          <div>by a player with the following history:</div>
+          {/* <div>by a player with the following history:</div>
           <div>
             {!_.isEmpty(opponentHistory)
               ? renderHistory(opponentHistory)
               : 'None Yet'}
-          </div>
+          </div> */}
           <Grid
             container={true}
             direction={'row'}

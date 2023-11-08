@@ -7,11 +7,12 @@ import {
   InputAdornment,
   TextField
 } from '@mui/material';
+import _ from 'lodash';
 import ButtonWithRefresh from './ButtonWithRefresh';
-import { saveOffer } from '../queries/offers';
+import { getOfferHistory, saveOffer } from '../queries/offers';
 import { checkForGames } from '../queries/games';
 import { updateWinnings } from '../queries/login';
-import { IGameState, SetState } from '../types';
+import { IGameState, IOpponentHistory, SetState } from '../types';
 
 interface IProps {
   gameState: IGameState;
@@ -25,12 +26,41 @@ const MakeOffer = (props: IProps) => {
 
   const [offer, setOffer] = useState<number>(5);
   const [offerSubmitted, setOfferSubmitted] = useState<boolean>(false);
+  const [opponentHistory, setOpponentHistory] = useState<IOpponentHistory[]>(
+    []
+  );
 
   useEffect(() => {
+    getOfferHistory(setOpponentHistory, userId, gameState.id, gameState.round);
+
     if (gameState.round > 1) {
       updateWinnings(userId, gameState.id, setWinnings);
     }
   }, []);
+
+  const renderHistory = (opponentHistory: IOpponentHistory[]) => {
+    return (
+      <ul>
+        {opponentHistory.map((historyItem: IOpponentHistory, index: number) => {
+          const { accepted, amount, round_number } = historyItem;
+          return (
+            <li key={`history-row-${index + 1}`}>
+              {`Round ${round_number}: Was offered $${amount} and `}
+              {accepted ? (
+                <span style={{ fontWeight: 'bold', color: 'green' }}>
+                  accepted
+                </span>
+              ) : (
+                <span style={{ fontWeight: 'bold', color: 'red' }}>
+                  rejected
+                </span>
+              )}
+            </li>
+          );
+        })}
+      </ul>
+    );
+  };
 
   if (!offerSubmitted) {
     return (
@@ -81,6 +111,12 @@ const MakeOffer = (props: IProps) => {
           </div>
           <div>to you</div>
           <br />
+          <div style={{ textDecoration: 'underline' }}>Opponent history:</div>
+          <div>
+            {!_.isEmpty(opponentHistory)
+              ? renderHistory(opponentHistory)
+              : 'None Yet'}
+          </div>
           <Button
             onClick={() => {
               saveOffer(offer, gameState.id, gameState.round, userId);
