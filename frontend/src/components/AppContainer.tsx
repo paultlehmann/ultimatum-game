@@ -1,12 +1,14 @@
 import { ReactNode } from 'react';
 import TopHeader from './TopHeader';
-import { IGameState, IUser, SetState } from '../types';
+import { IGameState, ILastOfferStatus, IUser, SetState } from '../types';
 
 interface IProps {
   children: ReactNode;
   gameId: number;
+  lastOfferStatus: ILastOfferStatus | null;
   round: number;
   setGameState: SetState<IGameState>;
+  setLastOfferStatus: SetState<ILastOfferStatus | null>;
   setUser: SetState<IUser>;
   setWinnings: SetState<number>;
   userName: string;
@@ -17,8 +19,10 @@ const AppContainer = (props: IProps) => {
   const {
     children,
     gameId,
+    lastOfferStatus,
     round,
     setGameState,
+    setLastOfferStatus,
     setUser,
     setWinnings,
     userName,
@@ -29,8 +33,10 @@ const AppContainer = (props: IProps) => {
     <>
       <TopHeader
         gameId={gameId}
+        lastOfferStatus={lastOfferStatus}
         round={round}
         setGameState={setGameState}
+        setLastOfferStatus={setLastOfferStatus}
         setUser={setUser}
         userName={userName}
         setWinnings={setWinnings}

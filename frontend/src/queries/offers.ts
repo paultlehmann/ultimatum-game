@@ -8,6 +8,12 @@ import {
   SetState
 } from '../types';
 
+interface ILastRoundOffer {
+  accepted: boolean;
+  amount: number;
+  role: 'offerer' | 'recipient';
+}
+
 const dbHost = import.meta.env.VITE_REACT_APP_DB_HOST;
 const backendPort = import.meta.env.VITE_REACT_APP_BACKEND_PORT;
 
@@ -224,7 +230,24 @@ export const checkIfSingleOfferAccepted = (
     .then(async (response: Response) => {
       return response.json();
     })
-    .then((data: any) => {
+    .then((data: ILastRoundOffer[]) => {
       console.log('offer check data', data);
+
+      // @ts-ignore
+      const myOfferRow: ILastRoundOffer = data.rows.find(
+        (row: ILastRoundOffer) => row.role === 'offerer'
+      );
+
+      // @ts-ignore
+      const offerToMeRow: ILastRoundOffer = data.rows.find(
+        (row: ILastRoundOffer) => row.role === 'recipient'
+      );
+
+      setLastOfferStatus({
+        myOfferAccepted: myOfferRow.accepted,
+        myOfferAmount: myOfferRow.amount,
+        offerToMeAccepted: offerToMeRow.accepted,
+        offerToMeAmount: offerToMeRow.amount
+      });
     });
 };

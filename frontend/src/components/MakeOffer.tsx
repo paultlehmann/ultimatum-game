@@ -9,20 +9,31 @@ import {
 } from '@mui/material';
 import _ from 'lodash';
 import ButtonWithRefresh from './ButtonWithRefresh';
-import { getOfferHistory, saveOffer } from '../queries/offers';
+import {
+  checkIfSingleOfferAccepted,
+  getOfferHistory,
+  saveOffer
+} from '../queries/offers';
 import { checkForGames } from '../queries/games';
 import { updateWinnings } from '../queries/login';
-import { IGameState, IOpponentHistory, SetState } from '../types';
+import {
+  IGameState,
+  ILastOfferStatus,
+  IOpponentHistory,
+  SetState
+} from '../types';
 
 interface IProps {
   gameState: IGameState;
   setGameState: SetState<IGameState>;
+  setLastOfferStatus: SetState<ILastOfferStatus | null>;
   setWinnings: SetState<number>;
   userId: number;
 }
 
 const MakeOffer = (props: IProps) => {
-  const { gameState, setGameState, setWinnings, userId } = props;
+  const { gameState, setGameState, setLastOfferStatus, setWinnings, userId } =
+    props;
 
   const [offer, setOffer] = useState<number>(5);
   const [offerSubmitted, setOfferSubmitted] = useState<boolean>(false);
@@ -35,6 +46,12 @@ const MakeOffer = (props: IProps) => {
 
     if (gameState.round > 1) {
       updateWinnings(userId, gameState.id, setWinnings);
+      checkIfSingleOfferAccepted(
+        gameState.id,
+        userId,
+        gameState.round - 1,
+        setLastOfferStatus
+      );
     }
   }, []);
 

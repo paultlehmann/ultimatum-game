@@ -215,7 +215,9 @@ export const checkIfSingleOfferAcceptedResolver =
     const { gameId, userId, round } = req.body;
 
     const query = `
-  select accepted from offers where game_id = ${gameId} and round_number = ${round} and offerer_id = ${userId}
+  select accepted, amount, 'offerer' as role from offers where game_id = ${gameId} and round_number = ${round} and offerer_id = ${userId}
+  UNION
+  select accepted, amount, 'recipient' as role from offers where game_id = ${gameId} and round_number = ${round} and recipient_id = ${userId}
   `;
 
     console.log('checkIfSingleOfferAcceptedResolver query', query);

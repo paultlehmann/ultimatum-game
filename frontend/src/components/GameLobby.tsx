@@ -4,18 +4,27 @@ import ButtonWithRefresh from './ButtonWithRefresh';
 import AcceptOffer from './AcceptOffer';
 import MakeOffer from './MakeOffer';
 import { addParticipantToGame, checkForGames } from '../queries/games';
-import { IGameRow, IGameState, IUser, SetState, TGameStage } from '../types';
+import {
+  IGameRow,
+  IGameState,
+  ILastOfferStatus,
+  IUser,
+  SetState,
+  TGameStage
+} from '../types';
 import Standings from './Standings';
 
 interface IProps {
   gameState: IGameState;
   setGameState: SetState<IGameState>;
+  setLastOfferStatus: SetState<ILastOfferStatus | null>;
   setWinnings: SetState<number>;
   user: IUser;
 }
 
 const GameLobby = (props: IProps) => {
-  const { gameState, setGameState, setWinnings, user } = props;
+  const { gameState, setGameState, setLastOfferStatus, setWinnings, user } =
+    props;
 
   const { id: userId, userName } = user;
 
@@ -47,6 +56,7 @@ const GameLobby = (props: IProps) => {
           <MakeOffer
             gameState={gameState}
             setGameState={setGameState}
+            setLastOfferStatus={setLastOfferStatus}
             setWinnings={setWinnings}
             userId={userId}
           />

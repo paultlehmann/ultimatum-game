@@ -44,6 +44,8 @@ export interface IStandingsRow {
 }
 
 export interface ILastOfferStatus {
-  accepted: boolean;
-  amount: number;
+  myOfferAccepted: boolean;
+  myOfferAmount: number;
+  offerToMeAccepted: boolean;
+  offerToMeAmount: number;
 }

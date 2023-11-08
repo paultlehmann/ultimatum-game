@@ -4,7 +4,7 @@ import LoginPage from './components/LoginPage';
 import AppContainer from './components/AppContainer';
 import GameLobby from './components/GameLobby';
 import ManageGame from './components/ManageGame';
-import { IGameState, IUser } from './types';
+import { IGameState, ILastOfferStatus, IUser } from './types';
 
 const App = () => {
   const [user, setUser] = useState<IUser>({
@@ -22,17 +22,22 @@ const App = () => {
 
   const [winnings, setWinnings] = useState<number>(0);
 
+  const [lastOfferStatus, setLastOfferStatus] =
+    useState<ILastOfferStatus | null>(null);
+
   if (!user.userName) {
     return <LoginPage setUser={setUser} />;
   } else {
     return (
       <AppContainer
         gameId={gameState.id}
+        lastOfferStatus={lastOfferStatus}
         round={gameState.round}
         setGameState={setGameState}
+        setLastOfferStatus={setLastOfferStatus}
         setUser={setUser}
-        userName={user.userName}
         setWinnings={setWinnings}
+        userName={user.userName}
         winnings={!user.admin ? winnings : undefined}
       >
         {user.admin ? (
@@ -45,6 +50,7 @@ const App = () => {
           <GameLobby
             gameState={gameState}
             setGameState={setGameState}
+            setLastOfferStatus={setLastOfferStatus}
             setWinnings={setWinnings}
             user={user}
           />
